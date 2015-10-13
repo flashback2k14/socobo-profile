@@ -1,0 +1,59 @@
+<dom-module id="socobo-profile-image">
+  <style>
+    :host {
+      display: block;
+    }
+    .image-holder-container {
+      @apply(--layout-vertical);
+      margin: 40px 20px 0 20px;
+      width: 300px;
+      height: 300px;
+    }
+    .image-container {
+
+    }
+    .circular {
+      display: inline-block;
+      height: 300px;
+      width: 300px;
+      overflow: hidden;
+      -webkit-border-radius: 150px;
+      -moz-border-radius: 150px;
+      border-radius: 50%;
+      -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+      -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+      box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    }
+  </style>
+
+  <template>
+    <div class="image-holder-container">
+      <div class="image-container">
+        <iron-image id="ironImage"
+                    class="circular"
+                    src="{{imageSource}}"
+                    sizing="cover"
+                    fade
+                    preload
+                    background-color="lightgray"
+                    placeholder="http://lorempixel.com/600/600">
+        </iron-image>
+      </div>
+    </div>
+  </template>
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'socobo-profile-image',
+
+      properties: {
+        imageSource: {
+          type: String,
+          notify: true
+        }
+      }
+    });
+  })();
+</script>

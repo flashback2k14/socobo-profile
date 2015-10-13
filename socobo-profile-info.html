@@ -1,0 +1,46 @@
+<dom-module id="socobo-profile-info">
+  <style>
+    :host {
+      display: block;
+    }
+    .profile-info-container {
+      @apply(--layout-vertical);
+    }
+  </style>
+
+  <template>
+    <div class="profile-info-container">
+      <paper-dropdown-menu
+        id="ddTest"
+        label="Test">
+        <paper-menu
+          class="dropdown-content">
+          <template
+            is="dom-repeat"
+            items="{{testItems}}">
+            <paper-item>{{item}}</paper-item>
+          </template>
+        </paper-menu>
+      </paper-dropdown-menu>
+    </div>
+  </template>
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'socobo-profile-info',
+
+      properties: {
+        userObject: {
+          type: Object,
+          value: {}
+        }
+      },
+
+      ready: function() {
+        this.testItems = ["", "Hello", "World", "What", "are", "you", "doing", "?"];
+      }
+    });
+  })();
+</script>
