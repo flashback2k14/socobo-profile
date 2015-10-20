@@ -6,22 +6,207 @@
     .profile-info-container {
       @apply(--layout-vertical);
     }
+    .style-paper-card {
+      --paper-card-header: {
+        background: #062f3c;
+      };
+      --paper-card-header-text: {
+        margin-left: 20px;
+        font-size: 35px;
+        color: #fff;
+      };
+      --paper-card-content: {
+         font-size: 20px;
+      };
+    }
+    .paper-card-height-normal {
+      height: 230px;
+    }
+    .paper-card-height-large {
+      height: 400px;
+    }
+    /*USER INFO*/
+    .profile-info-standard {
+      @apply(--layout-vertical);
+      margin: 0 20px;
+    }
+    .style-fab-edit-info-standard {
+      position: absolute !important;
+      top: 48px;
+      right: 48px;
+    }
+    .show-info {
+      display: block;
+      margin-top: -15px;
+    }
+    .edit-info {
+      display: none;
+    }
+    .vertical-line {
+      @apply(--layout-vertical);
+      margin: 10px 20px 5px 20px;
+    }
+    .style-el-info {
+      margin-top: 5px;
+    }
+    .bottom-right-align {
+      position: absolute !important;
+      right: 30px;
+      bottom: 30px;
+    }
+    .style-save-button {
+      --paper-button: {
+        background: var(--paper-green-500);
+        color: #ffffff;
+        font-size: medium;
+      };
+    }
+    /*USER BIOGRAPHY*/
+    .profile-info-biography {
+      @apply(--layout-vertical);
+      margin: 20px 20px;
+    }
+    .style-fab-edit-info-biography {
+      position: absolute !important;
+      top: 48px;
+      right: 48px;
+    }
+    .style-label-user-biography {
+      min-height: 50px;
+      height: 50px;
+      max-height: 50px;
+      overflow: auto;
+    }
+    .width-for-inputs {
+      width: 80%;
+    }
+    /*USER ADMINISTRATION*/
+    .profile-info-admin {
+      @apply(--layout-vertical);
+      margin: 0 20px;
+    }
+    .main-admin-container {
+      @apply(--layout-horizontal);
+    }
+    .left-admin-container {
+      @apply(--layout-vertical);
+      width: 25%;
+      margin: 30px 10px 0 15px;
+    }
+    .style-admin-buttons {
+      --paper-button: {
+        background: var(--paper-indigo-700);
+        color: #ffffff;
+        font-size: medium;
+        margin-bottom: 15px;
+      };
+    }
+    .right-admin-container {
+      @apply(--layout-vertical);
+      width: 75%;
+      margin: 30px 10px 0 30px;
+    }
+    .show-right-admin-container {
+      display: block;
+    }
+    .hide-right-admin-container {
+      display: none;
+    }
+    .style-admin-inputs {
+      width: 70%;
+      margin-bottom: 15px;
+    }
+    .btn-submit-container {
+      @apply(--layout-horizontal);
+      @apply(--layout-end-justified);
+      width: 70%;
+    }
   </style>
 
   <template>
     <div class="profile-info-container">
-      <paper-dropdown-menu
-        id="ddTest"
-        label="Test">
-        <paper-menu
-          class="dropdown-content">
-          <template
-            is="dom-repeat"
-            items="{{testItems}}">
-            <paper-item>{{item}}</paper-item>
-          </template>
-        </paper-menu>
-      </paper-dropdown-menu>
+      <!-- Information Section -->
+      <div class="profile-info-standard">
+        <paper-card class="style-paper-card paper-card-height-normal" heading="Information" elevation="3">
+          <paper-fab id="fabEditInfoStandard" class="style-fab-edit-info-standard" icon="create" on-tap="_editInfoStandard"></paper-fab>
+          <div class="card-content">
+            <div id="showInfoStandard" class="show-info">
+              <div class="vertical-line">
+                <label for="elUsername"><strong>Username</strong></label>
+                <span id="elUsername" class="style-el-info width-for-inputs">{{userObject.Username}}</span>
+              </div>
+              <div class="vertical-line">
+                <label for="elEmailAddress"><strong>Email-Address</strong></label>
+                <span id="elEmailAddress" class="style-el-info width-for-inputs">{{userObject.EmailAddress}}</span>
+              </div>
+            </div>
+            <div id="editInfoStandard" class="edit-info">
+              <div class="vertical-line">
+                <label for="elUsername"><strong>Username</strong></label>
+                <paper-input id="txtUsername" class="width-for-inputs" label="Username" type="text" value="{{userObject.Username}}" no-label-float="true"></paper-input>
+              </div>
+              <div class="vertical-line">
+                <label for="elEmailAddress"><strong>Email-Address</strong></label>
+                <paper-input id="txtEmailAddress" class="width-for-inputs" label="Username" type="email" value="{{userObject.EmailAddress}}" no-label-float="true"></paper-input>
+              </div>
+              <div class="bottom-right-align">
+                <paper-button id="btnSaveInfoStandard" class="style-save-button" on-tap="_saveInfoStandard" raised>Save</paper-button>
+              </div>
+            </div>
+          </div>
+        </paper-card>
+      </div>
+      <!-- Biography Section -->
+      <div class="profile-info-biography">
+        <paper-card class="style-paper-card paper-card-height-normal" heading="Biography" elevation="3">
+          <paper-fab id="fabEditInfoBiography" class="style-fab-edit-info-biography" icon="create" on-tap="_editInfoBiography"></paper-fab>
+          <div class="card-content">
+            <div id="showInfoBio" class="show-info">
+              <div class="vertical-line">
+                <span id="lblUserBiography" class="style-label-user-biography width-for-inputs">{{userObject.Biography}}</span>
+              </div>
+            </div>
+            <div id="editInfoBio" class="edit-info">
+              <div class="vertical-line">
+                <paper-textarea id="txtBiography" class="width-for-inputs" rows="5" max-rows="4" value="{{userObject.Biography}}" placeholder="Please tell us something about you!" no-label-float="true"></paper-textarea>
+              </div>
+              <div class="bottom-right-align">
+                <paper-button id="btnSaveInfoBiography" class="style-save-button" on-tap="_saveInfoBiography" raised>Save</paper-button>
+              </div>
+            </div>
+          </div>
+        </paper-card>
+      </div>
+      <!-- Administration Section -->
+      <template is="dom-if" if="{{_checkUserLoginProvider(userObject)}}">
+        <div class="profile-info-admin">
+          <paper-card class="style-paper-card paper-card-height-large" heading="Adminstration" elevation="3">
+            <div class="card-content">
+              <div class="main-admin-container">
+                <div class="left-admin-container">
+                  <paper-button id="btnChangeEmailAddress" class="style-admin-buttons" on-tap="_changeEmailAddress">Change Email Address</paper-button>
+                  <paper-button id="btnChangePassword" class="style-admin-buttons" on-tap="_changePassword">Change Password</paper-button>
+                  <paper-button id="btnResetPassword" class="style-admin-buttons" on-tap="_resetPassword">Reset Password</paper-button>
+                  <paper-button id="btnDeleteAccount" class="style-admin-buttons" on-tap="_deleteAccount">Delete Account</paper-button>
+                </div>
+                <div class="right-admin-container">
+                  <div id="rightAdminContainer" class="hide-right-admin-container">
+                    <paper-input id="txtOldEmailAddress" class="style-admin-inputs" label="Old Emailaddress" type="email" no-label-float="true"></paper-input>
+                    <paper-input id="txtNewEmailAddress" class="style-admin-inputs" label="New Emailaddress" type="email" no-label-float="true"></paper-input>
+                    <paper-input id="txtOldPassword" class="style-admin-inputs" label="Old Password" type="password" no-label-float="true"></paper-input>
+                    <paper-input id="txtNewPassword" class="style-admin-inputs" label="New Password" type="password" no-label-float="true"></paper-input>
+                    <div class="btn-submit-container">
+                      <paper-button id="btnSubmitAdminChanges" class="style-save-button" on-tap="_submitAdminChanges" raised>Submit</paper-button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </paper-card>
+        </div>
+      </template>
+
+      </div>
     </div>
   </template>
 </dom-module>
@@ -30,16 +215,146 @@
   (function() {
     Polymer({
       is: 'socobo-profile-info',
-
+      /**
+       * Element Properties
+       */
       properties: {
+        /**
+         * User Object
+         */
         userObject: {
           type: Object,
-          value: {}
+          value: {},
+          notify: true
+        }
+      },
+      /**
+       * Function for Show / Hide Edit Information Section
+       * @param e FAB
+       * @private
+       */
+      _editInfoStandard: function(e) {
+        this._toggleInformationArea(e);
+      },
+      /**
+       * Function for Show / Hide Edit Biography Section
+       * @param e FAB
+       * @private
+       */
+      _editInfoBiography: function(e) {
+        this._toggleInformationArea(e);
+      },
+      /**
+       * Function for Fire Event to Save Information changes.
+       * @private
+       */
+      _saveInfoStandard: function() {
+        var obj = {
+          usernameValue: this.$.txtUsername.value,
+          emailAddressValue: this.$.txtEmailAddress.value
+        };
+        this.fire("save-info-standard", obj);
+      },
+      /**
+       * Function for Fire Event to Save Biography changes.
+       * @private
+       */
+      _saveInfoBiography: function() {
+        this.fire("save-info-biography", {bioValue: this.$.txtBiography.value});
+      },
+
+      _changeEmailAddress: function(e) {
+        this._toggleRightAdminContainer(e);
+      },
+
+      _changePassword: function(e) {
+        this._toggleRightAdminContainer(e);
+      },
+
+      _resetPassword: function(e) {
+        this._toggleRightAdminContainer(e);
+      },
+
+      _deleteAccount: function(e) {
+        this._toggleRightAdminContainer(e);
+      },
+
+      _submitAdminChanges: function(e) {
+        this._toggleRightAdminContainer(e);
+      },
+
+      _toggleRightAdminContainer: function(e) {
+        var container = document.querySelector("#rightAdminContainer").classList;
+        var iOldEmailAddress = document.querySelector("#txtOldEmailAddress").classList;
+        var iNewEmailAddress = document.querySelector("#txtNewEmailAddress").classList;
+        var iOldPassword = document.querySelector("#txtOldPassword").classList;
+        var iNewPassword = document.querySelector("#txtNewPassword").classList;
+        var button = e.currentTarget.id;
+
+        if (container.contains("hide-right-admin-container")) {
+          container.remove("hide-right-admin-container");
+          container.add("show-right-admin-container");
+
+          switch (button) {
+            case "btnChangeEmailAddress":
+              iOldEmailAddress.add("show-right-admin-container");
+              iNewEmailAddress.add("show-right-admin-container");
+              iOldPassword.add("show-right-admin-container");
+              iNewPassword.add("hide-right-admin-container");
+              break;
+            case "btnChangePassword":
+
+              break;
+            case "btnResetPassword":
+
+              break;
+            case "btnDeleteAccount":
+
+              break;
+          }
+        } else {
+          container.remove("show-right-admin-container");
+          container.add("hide-right-admin-container");
         }
       },
 
-      ready: function() {
-        this.testItems = ["", "Hello", "World", "What", "are", "you", "doing", "?"];
+      /**
+       * Function for show Admin section only if the user is logged in with emailaddress.
+       * @param obj User Object
+       * @private
+       */
+      _checkUserLoginProvider: function(obj) {
+        if (typeof obj !== 'undefined') {
+          return obj.provider === "password";
+        }
+      },
+      /**
+       * Helper Function
+       * @param e FAB
+       * @private
+       */
+      _toggleInformationArea: function(e) {
+        if (e.currentTarget.id === "fabEditInfoStandard") {
+          this._toggleInformationItem(this.$.showInfoStandard);
+          this._toggleInformationItem(this.$.editInfoStandard);
+        } else {
+          this._toggleInformationItem(this.$.showInfoBio);
+          this._toggleInformationItem(this.$.editInfoBio);
+        }
+      },
+      /**
+       * Helper Helper Function
+       * @param element Info Container
+       * @private
+       */
+      _toggleInformationItem: function(element) {
+        if (element.classList.contains("show-info")) {
+          element.classList.remove("show-info");
+          element.classList.add("edit-info");
+        } else {
+          element.classList.remove("edit-info");
+          element.classList.add("show-info");
+        }
       }
     });
   })();

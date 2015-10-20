@@ -11,29 +11,19 @@
     .profile-image-container {
       @apply(--layout-horizontal);
       @apply(--layout-center-justified);
-      width: 30%;
+      width: 20%;
       height: 900px; /*100%;*/
-      margin: 20px 10px 0 0;
-      background-color: #062f3c;
-    }
-    .vertical-line {
-      @apply(--layout-vertical);
-      position: absolute;
-      top: 0;
-      left: 30%;
-      bottom: 0;
-      width: 1px;
-      height: 95%;
-      margin: 10px;
-      background-color: #000;
-      transform: transitionX(-50%);
+      margin: 0;
+      background: -webkit-linear-gradient(#04212A, #062f3c);
+      background: -o-linear-gradient(#04212A, #062f3c);
+      background: -moz-linear-gradient(#04212A, #062f3c);
+      background: linear-gradient(#04212A, #062f3c);
     }
     .profile-info-container {
       @apply(--layout-vertical);
-      width: 70%;
+      width: 80%;
       height: 100%;
-      margin: 10px;
-      background-color: #4caf50;
+      margin: 0;
     }
   </style>
 
@@ -42,11 +32,10 @@
       <div class="profile-image-container">
         <socobo-profile-image
           id="profileImage"
-          image-source="{{userObject.profileImage}}">
+          image-source="{{userObject.profileImage}}"
+          on-profile-image-changed="_handleProfileImageChanged">
         </socobo-profile-image>
       </div>
-
-      <div class="vertical-line"></div>
 
       <div class="profile-info-container">
         <socobo-profile-info
@@ -55,6 +44,8 @@
         </socobo-profile-info>
       </div>
     </div>
+    
+    <paper-toast id="infoToast" duration="2000"></paper-toast>
   </template>
 </dom-module>
 
@@ -66,12 +57,19 @@
       properties: {
         userLogin: {
           type: Object,
-          value: {}
+          value: {},
+          notify: true
         },
         userObject: {
           type: Object,
-          value: {}
+          value: {},
+          notify: true
         }
+      },
+      
+      _handleProfileImageChanged: function(e) {
+        this.$.infoToast.text = e.detail.value;
+        this.$.infoToast.toggle();
       }
     });
   })();

@@ -1,9 +1,18 @@
 <link rel="import" href="elements.html">
+<!--
+The following custom properties and mixins are available for styling:
 
+Custom property | Description | Default
+----------------|-------------|----------
+`--socobo-profile-XY` |  | ``
+
+@demo demo/index.html
+-->
 <dom-module id="socobo-profile">
   <style>
     :host {
       display: block;
+      font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       width: 100%;
       height: 900px; /*temp for developing (100%)*/
     }
@@ -21,15 +30,30 @@
 (function() {
   Polymer({
     is: 'socobo-profile',
-
+    /**
+     * Element Properties.
+     */
     properties: {
+      /**
+       * User Login Object
+       */
       userLogin: {
         type: Object,
-        value: {}
+        value: {},
+        notify: true
       },
+      /**
+       * User Object
+       */
       userObject: {
         type: Object,
-        value: {}
+        value: {
+          Username: "John.Doe",
+          provider: "password",
+          EmailAddress: "John.Doe@test.test",
+          Biography: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+        },
+        notify: true
       }
     }
   });
