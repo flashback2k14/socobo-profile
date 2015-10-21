@@ -40,11 +40,15 @@
       <div class="profile-info-container">
         <socobo-profile-info
           id="profileInfo"
-          user-object="{{userObject}}">
+          user-object="{{userObject}}"
+          on-change-email-address="_handleChangeEmailAddress"
+          on-change-password="_handleChangePassword"
+          on-reset-password="_handleResetPassword"
+          on-delete-account="_handleDeleteAccount">
         </socobo-profile-info>
       </div>
     </div>
-    
+
     <paper-toast id="infoToast" duration="2000"></paper-toast>
   </template>
 </dom-module>
@@ -66,10 +70,56 @@
           notify: true
         }
       },
-      
+      /**
+       * PROFILE IMAGE
+       */
+      /**
+       * Profile Image Changed
+       * @param e
+       * @private
+       */
       _handleProfileImageChanged: function(e) {
         this.$.infoToast.text = e.detail.value;
         this.$.infoToast.toggle();
+      },
+
+      /**
+       * PROFILE INFO
+       */
+      /**
+       *
+       * @param e
+       * @private
+       */
+      _handleChangeEmailAddress: function(e){
+        alert(JSON.stringify(e.detail));
+      },
+
+      /**
+       *
+       * @param e
+       * @private
+       */
+      _handleChangePassword: function(e) {
+        alert(JSON.stringify(e.detail));
+      },
+
+      /**
+       *
+       * @param e
+       * @private
+       */
+      _handleResetPassword: function(e) {
+        alert(JSON.stringify(e.detail));
+      },
+
+      /**
+       *
+       * @param e
+       * @private
+       */
+      _handleDeleteAccount: function(e) {
+        alert(JSON.stringify(e.detail));
       }
     });
   })();
