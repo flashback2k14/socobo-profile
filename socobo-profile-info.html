@@ -1,3 +1,12 @@
+<!--
+The following custom properties and mixins are available for styling:
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--socobo-profile-info-XY` |  | `{}`
+
+@demo demo/index.html
+-->
 <dom-module id="socobo-profile-info">
   <style>
     :host {
@@ -61,6 +70,13 @@
         font-size: medium;
       };
     }
+    .style-clear-button {
+      --paper-button: {
+         background: var(--paper-pink-500);
+         color: #ffffff;
+         font-size: medium;
+     };
+    }
     /*USER BIOGRAPHY*/
     .profile-info-biography {
       @apply(--layout-vertical);
@@ -120,6 +136,7 @@
       @apply(--layout-horizontal);
       @apply(--layout-end-justified);
       width: 70%;
+      margin-top: 20px;
     }
   </style>
 
@@ -191,11 +208,52 @@
                 </div>
                 <div class="right-admin-container">
                   <div id="rightAdminContainer" class="hide-right-admin-container">
-                    <paper-input id="txtOldEmailAddress" class="style-admin-inputs hide-right-admin-container" label="Old Emailaddress" type="email" no-label-float="true"></paper-input>
-                    <paper-input id="txtNewEmailAddress" class="style-admin-inputs hide-right-admin-container" label="New Emailaddress" type="email" no-label-float="true"></paper-input>
-                    <paper-input id="txtOldPassword" class="style-admin-inputs hide-right-admin-container" label="Old Password" type="password" no-label-float="true"></paper-input>
-                    <paper-input id="txtNewPassword" class="style-admin-inputs hide-right-admin-container" label="New Password" type="password" no-label-float="true"></paper-input>
+                    <paper-input
+                      id="txtOldEmailAddress"
+                      class="style-admin-inputs hide-right-admin-container"
+                      label="Old Emailaddress"
+                      type="email"
+                      no-label-float="true"
+                      auto-validate
+                      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                      error-message="no valid emailaddress">
+                    </paper-input>
+                    <paper-input
+                      id="txtNewEmailAddress"
+                      class="style-admin-inputs hide-right-admin-container"
+                      label="New Emailaddress"
+                      type="email"
+                      no-label-float="true"
+                      auto-validate
+                      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                      error-message="no valid emailaddress">
+                    </paper-input>
+                    <paper-input
+                      id="txtOldPassword"
+                      class="style-admin-inputs hide-right-admin-container"
+                      label="Old Password"
+                      type="password"
+                      no-label-float="true"
+                      char-counter auto-validate
+                      pattern=".+"
+                      minlength="8"
+                      maxlength="30"
+                      error-message="min. 8 character">
+                    </paper-input>
+                    <paper-input
+                      id="txtNewPassword"
+                      class="style-admin-inputs hide-right-admin-container"
+                      label="New Password"
+                      type="password"
+                      no-label-float="true"
+                      char-counter auto-validate
+                      pattern=".+"
+                      minlength="8"
+                      maxlength="30"
+                      error-message="min. 8 character">
+                    </paper-input>
                     <div class="btn-submit-container">
+                      <paper-button id="btnClearAdminChanges" class="style-clear-button" on-tap="_clearAdminChanges" raised>Clear</paper-button>
                       <paper-button id="btnSubmitAdminChanges" class="style-save-button" on-tap="_submitAdminChanges" raised>Submit</paper-button>
                     </div>
                   </div>
@@ -205,8 +263,6 @@
           </paper-card>
         </div>
       </template>
-
-      </div>
     </div>
   </template>
 </dom-module>
@@ -215,6 +271,41 @@
   (function() {
     Polymer({
       is: 'socobo-profile-info',
+      /**
+       * This Event is fired if the save User Infos button is pressed. <br/>
+       * `Detail`: changed User Infos {Object} <br/>
+       * @event save-info-standard
+       */
+      /**
+       * This Event is fired if the save User Biography button is pressed. <br/>
+       * `Detail`: changed User Biography {Object} <br/>
+       * @event save-info-biography
+       */
+      /**
+       * This Event is fired if the Change Email Address button is pressed. <br/>
+       * `Detail`: changed User Administration Infos {Object} <br/>
+       * @event change-email-address
+       */
+      /**
+       * This Event is fired if the Change Password button is pressed. <br/>
+       * `Detail`: changed User Administration Infos {Object} <br/>
+       * @event change-password
+       */
+      /**
+       * This Event is fired if the Passwords not matching. <br/>
+       * @event passwords-not-matching
+       */
+      /**
+       * This Event is fired if the Reset Password button is pressed. <br/>
+       * `Detail`: changed User Administration Infos {Object} <br/>
+       * @event reset-password
+       */
+      /**
+       * This Event is fired if the Delete Account button is pressed. <br/>
+       * `Detail`: changed User Administration Infos {Object} <br/>
+       * @event delete-account
+       */
+
       /**
        * Element Properties
        */
@@ -242,23 +333,27 @@
 
       /**
        * Function for Show / Hide Edit Information Section
-       * @param e FAB
+       * @param {Object} e FAB
        * @private
+       * @method _editInfoStandard
        */
       _editInfoStandard: function(e) {
-        this._toggleInformationArea(e);
+        Util.getInstance(this).toggleInformationArea(e);
       },
       /**
        * Function for Show / Hide Edit Biography Section
-       * @param e FAB
+       * @param {Object} e FAB
        * @private
+       * @method _editInfoBiography
        */
       _editInfoBiography: function(e) {
-        this._toggleInformationArea(e);
+        Util.getInstance(this).toggleInformationArea(e);
       },
+
       /**
        * Function for Fire Event to Save Information changes.
        * @private
+       * @method _saveInfoStandard
        */
       _saveInfoStandard: function() {
         var obj = {
@@ -270,263 +365,143 @@
       /**
        * Function for Fire Event to Save Biography changes.
        * @private
+       * @method _saveInfoBiography
        */
       _saveInfoBiography: function() {
         this.fire("save-info-biography", {bioValue: this.$.txtBiography.value});
       },
+
       /**
        * Function for show Admin section only if the user is logged in with emailaddress.
-       * @param obj User Object
+       * @param {Object} obj User Object
        * @private
+       * @method _checkUserLoginProvider
        */
       _checkUserLoginProvider: function(obj) {
         if (typeof obj !== 'undefined') {
           return obj.provider === "password";
         }
       },
+
       /**
        * Toggle Change Email Address Section
-       * @param e Button
+       * @param {Object} e Button
        * @private
+       * @member _changeEmailAddress
        */
       _changeEmailAddress: function(e) {
-        this._toggleRightAdminContainerElements(e);
+        this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
       },
       /**
        * Toggle Change Password
-       * @param e Button
+       * @param {Object} e Button
        * @private
+       * @method _changePassword
        */
       _changePassword: function(e) {
-        this._toggleRightAdminContainerElements(e);
+        this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
       },
       /**
        * Toggle Reset Password Section
-       * @param e Button
+       * @param {Object} e Button
        * @private
+       * @method _resetPassword
        */
       _resetPassword: function(e) {
-        this._toggleRightAdminContainerElements(e);
+        this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
       },
       /**
        * Toggle Delete Account Section
-       * @param e Button
+       * @param {Object} e Button
        * @private
+       * @method _deleteAccount
        */
       _deleteAccount: function(e) {
-        this._toggleRightAdminContainerElements(e);
+        this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
       },
 
       /**
        * Function to submit changes
-       * @param e Button
+       * @param {Object} e Button
        * @private
+       * @method _submitAdminChanges
        */
       _submitAdminChanges: function(e) {
-        var txtOldEmailAddress = document.querySelector("#txtOldEmailAddress").value;
-        var txtNewEmailAddress = document.querySelector("#txtNewEmailAddress").value;
-        var txtOldPassword = document.querySelector("#txtOldPassword").value;
-        var txtNewPassword = document.querySelector("#txtNewPassword").value;
+        var txtOldEmailAddress = document.querySelector("#txtOldEmailAddress");
+        var txtNewEmailAddress = document.querySelector("#txtNewEmailAddress");
+        var txtOldPassword = document.querySelector("#txtOldPassword");
+        var txtNewPassword = document.querySelector("#txtNewPassword");
 
         switch (this._adminSection) {
           case "ChangeEmailAddress":
             this._changeValues = {
               type: "ChangeEmailAddress",
-              oldMail: txtOldEmailAddress,
-              newMail: txtNewEmailAddress,
-              oldPwd: txtOldPassword
+              oldMail: txtOldEmailAddress.value,
+              newMail: txtNewEmailAddress.value,
+              oldPwd: txtOldPassword.value
             };
+            this.fire("change-email-address", this._changeValues);
             txtOldEmailAddress.value = "";
             txtNewEmailAddress.value = "";
             txtOldPassword.value = "";
-            this.fire("change-email-address", this._changeValues);
+            this._changeValues = {};
             break;
           case "ChangePassword":
-            this._changeValues = {
-              type: "ChangePassword",
-              oldMail: txtOldEmailAddress,
-              oldPwd: txtOldPassword,
-              newPwd: txtNewPassword
-            };
-            txtOldEmailAddress.value = "";
-            txtOldPassword.value = "";
-            txtNewPassword.value = "";
-            this.fire("change-password", this._changeValues);
+            if (Util.getInstance(this).arePasswordsMatching(txtOldPassword.value, txtNewPassword.value)) {
+              this._changeValues = {
+                type: "ChangePassword",
+                oldMail: txtOldEmailAddress.value,
+                oldPwd: txtOldPassword.value,
+                newPwd: txtNewPassword.value
+              };
+              txtOldEmailAddress.value = "";
+              txtOldPassword.value = "";
+              txtNewPassword.value = "";
+              this.fire("change-password", this._changeValues);
+            } else {
+              this.fire("passwords-not-matching", {value: "Passwords not matching!"});
+              txtOldPassword.value = "";
+              txtNewPassword.value = "";
+              this._changeValues = {};
+              return;
+            }
             break;
           case "ResetPassword":
             this._changeValues = {
               type: "ResetPassword",
-              oldMail: txtOldEmailAddress
+              oldMail: txtOldEmailAddress.value
             };
-            txtOldEmailAddress.value = "";
             this.fire("reset-password", this._changeValues);
+            txtOldEmailAddress.value = "";
+            this._changeValues = {};
             break;
           case "DeleteAccount":
             this._changeValues = {
               type: "DeleteAccount",
-              oldMail: txtOldEmailAddress,
-              oldPwd: txtOldPassword
+              oldMail: txtOldEmailAddress.value,
+              oldPwd: txtOldPassword.value
             };
+            this.fire("delete-account", this._changeValues);
             txtOldEmailAddress.value = "";
             txtOldPassword.value = "";
-            this.fire("delete-account", this._changeValues);
+            this._changeValues = {};
             break;
           default:
             alert("no valid operation chosen!");
         }
 
-        this._toggleRightAdminContainerElements(e);
-      },
-
-      /**
-       * HELPER FUNCTIONS PROFILE SECTION
-       */
-      /**
-       * Toggle specific Profile Section to Edit or Show Information
-       * @param e FAB
-       * @private
-       */
-      _toggleInformationArea: function(e) {
-        if (e.currentTarget.id === "fabEditInfoStandard") {
-          this._toggleInformationItem(this.$.showInfoStandard, "show-info", "edit-info");
-          this._toggleInformationItem(this.$.editInfoStandard, "show-info", "edit-info");
-        } else {
-          this._toggleInformationItem(this.$.showInfoBio, "show-info", "edit-info");
-          this._toggleInformationItem(this.$.editInfoBio, "show-info", "edit-info");
-        }
+        this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
       },
       /**
-       * Toggle specific Profile Section
-       * @param element Info Container
-       * @param showCssClass CSS Class to show an Element
-       * @param hideCssClass CSS Class to hide an Element
+       * Clear Input Fields
        * @private
+       * @method _clearAdminChanges
        */
-      _toggleInformationItem: function(element, showCssClass, hideCssClass) {
-        if (element.classList.contains(showCssClass)) {
-          this._hideElement(element, showCssClass, hideCssClass);
-        } else {
-          this._showElement(element, showCssClass, hideCssClass);
-        }
-      },
-
-      /**
-       * HELPER FUNCTIONS ADMINISTRATION SECTION
-       */
-      /**
-       * Toggle right Admin Container to show specific Input Fields
-       * @param e Button
-       * @private
-       */
-      _toggleRightAdminContainerElements: function(e) {
-        var container = document.querySelector("#rightAdminContainer");
-        var iOldEmailAddress = document.querySelector("#txtOldEmailAddress");
-        var iNewEmailAddress = document.querySelector("#txtNewEmailAddress");
-        var iOldPassword = document.querySelector("#txtOldPassword");
-        var iNewPassword = document.querySelector("#txtNewPassword");
-        var button = e.currentTarget.id;
-
-        if (container.classList.contains("hide-right-admin-container")) {
-          this._showElement(container, "show-right-admin-container", "hide-right-admin-container");
-
-          switch (button) {
-            case "btnChangeEmailAddress":
-              if (!this._isElementShown(iOldEmailAddress)) {
-                this._showElement(iOldEmailAddress, "show-right-admin-container", "hide-right-admin-container");
-              }
-              if (!this._isElementShown(iNewEmailAddress)) {
-                this._showElement(iNewEmailAddress, "show-right-admin-container", "hide-right-admin-container");
-              }
-              if (!this._isElementShown(iOldPassword)) {
-                this._showElement(iOldPassword, "show-right-admin-container", "hide-right-admin-container");
-              }
-              if (this._isElementShown(iNewPassword)) {
-                this._hideElement(iNewPassword, "show-right-admin-container", "hide-right-admin-container");
-              }
-              this._adminSection = "ChangeEmailAddress";
-              break;
-            case "btnChangePassword":
-              if (!this._isElementShown(iOldEmailAddress)) {
-                this._showElement(iOldEmailAddress, "show-right-admin-container", "hide-right-admin-container");
-              }
-              if (this._isElementShown(iNewEmailAddress)) {
-                this._hideElement(iNewEmailAddress, "show-right-admin-container", "hide-right-admin-container");
-              }
-              if (!this._isElementShown(iOldPassword)) {
-                this._showElement(iOldPassword, "show-right-admin-container", "hide-right-admin-container");
-              }
-              if (!this._isElementShown(iNewPassword)) {
-                this._showElement(iNewPassword, "show-right-admin-container", "hide-right-admin-container");
-              }
-              this._adminSection = "ChangePassword";
-              break;
-            case "btnResetPassword":
-              if (!this._isElementShown(iOldEmailAddress)) {
-                this._showElement(iOldEmailAddress, "show-right-admin-container", "hide-right-admin-container");
-              }
-              if (this._isElementShown(iNewEmailAddress)) {
-                this._hideElement(iNewEmailAddress, "show-right-admin-container", "hide-right-admin-container");
-              }
-              if (this._isElementShown(iOldPassword)) {
-                this._hideElement(iOldPassword, "show-right-admin-container", "hide-right-admin-container");
-              }
-              if (this._isElementShown(iNewPassword)) {
-                this._hideElement(iNewPassword, "show-right-admin-container", "hide-right-admin-container");
-              }
-              this._adminSection = "ResetPassword";
-              break;
-            case "btnDeleteAccount":
-              if (!this._isElementShown(iOldEmailAddress)) {
-                this._showElement(iOldEmailAddress, "show-right-admin-container", "hide-right-admin-container");
-              }
-              if (this._isElementShown(iNewEmailAddress)) {
-                this._hideElement(iNewEmailAddress, "show-right-admin-container", "hide-right-admin-container");
-              }
-              if (!this._isElementShown(iOldPassword)) {
-                this._showElement(iOldPassword, "show-right-admin-container", "hide-right-admin-container");
-              }
-              if (this._isElementShown(iNewPassword)) {
-                this._hideElement(iNewPassword, "show-right-admin-container", "hide-right-admin-container");
-              }
-              this._adminSection = "DeleteAccount";
-              break;
-          }
-        } else {
-          this._adminSection = "";
-          this._changeValues = {};
-          this._hideElement(container, "show-right-admin-container", "hide-right-admin-container");
-        }
-      },
-      /**
-       * Check if an Element is shown
-       * @param element Input Field
-       * @return {boolean}
-       * @private
-       */
-      _isElementShown: function(element) {
-        return element.classList.contains("show-right-admin-container");
-      },
-      /**
-       * Show an Element
-       * @param element Element
-       * @param showCssClass CSS Class to show an Element
-       * @param hideCssClass CSS Class to hide an Element
-       * @private
-       */
-      _showElement: function(element, showCssClass, hideCssClass) {
-        element.classList.remove(hideCssClass);
-        element.classList.add(showCssClass);
-      },
-      /**
-       * Hide an Element
-       * @param element Element
-       * @param showCssClass CSS Class to show an Element
-       * @param hideCssClass CSS Class to hide an Element
-       * @private
-       */
-      _hideElement: function(element, showCssClass, hideCssClass) {
-        element.classList.remove(showCssClass);
-        element.classList.add(hideCssClass);
+      _clearAdminChanges: function() {
+        document.querySelector("#txtOldEmailAddress").value = "";
+        document.querySelector("#txtNewEmailAddress").value = "";
+        document.querySelector("#txtOldPassword").value = "";
+        document.querySelector("#txtNewPassword").value = "";
       }
     });
   })();

@@ -3,7 +3,8 @@ The following custom properties and mixins are available for styling:
 
 Custom property | Description | Default
 ----------------|-------------|----------
-`--socobo-profile-image-XY` |  | ``
+`--socobo-profile-image-image-holder-container` | Styling the Container that holds the Image. | `{}`
+`--socobo-profile-image-image-container` | Styling the Container that lies under the holder Container. | `{}`
 
 @demo demo/index.html
 -->
@@ -17,6 +18,7 @@ Custom property | Description | Default
       margin: 40px 20px 0 20px;
       width: 300px;
       height: 300px;
+      @apply(--socobo-profile-image-image-holder-container);
     }
     .image-holder-container:hover {
       cursor: pointer;

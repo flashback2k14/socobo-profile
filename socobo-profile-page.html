@@ -1,3 +1,12 @@
+<!--
+The following custom properties and mixins are available for styling:
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--socobo-profile-page-XY` |  | `{}`
+
+@demo demo/index.html
+-->
 <dom-module id="socobo-profile-page">
   <style>
     :host {
@@ -44,7 +53,8 @@
           on-change-email-address="_handleChangeEmailAddress"
           on-change-password="_handleChangePassword"
           on-reset-password="_handleResetPassword"
-          on-delete-account="_handleDeleteAccount">
+          on-delete-account="_handleDeleteAccount"
+          on-passwords-not-matching="_handlePasswordsNotMatching">
         </socobo-profile-info>
       </div>
     </div>
@@ -120,6 +130,16 @@
        */
       _handleDeleteAccount: function(e) {
         alert(JSON.stringify(e.detail));
+      },
+
+      /**
+       *
+       * @param e
+       * @private
+       */
+      _handlePasswordsNotMatching: function(e) {
+        this.$.infoToast.text = e.detail.value;
+        this.$.infoToast.toggle();
       }
     });
   })();

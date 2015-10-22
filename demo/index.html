@@ -8,6 +8,25 @@
     <link rel="import" href="../socobo-profile.html">
   </head>
   <body>
-    <socobo-profile></socobo-profile>
+    <template is="dom-bind" id="demo">
+      <socobo-profile user-login="{{userLogin}}" user-object="{{userObject}}"></socobo-profile>
+     </template>
+    <!--firebase-->
+    <script src='https://cdn.firebase.com/js/client/2.3.1/firebase.js'></script>
+    <!-- Demo Data -->
+    <script type="text/javascript">
+      var demo = document.querySelector('#demo');
+      demo.userLogin = {
+        "firebaseUrl": "https://<YOUR_FIREBASE_DATABASE>.firebaseio.com/",
+        "userId": "",
+        "expires": ""
+      };
+      demo.userObject = {
+        Username: "John.Doe",
+        provider: "password",
+        EmailAddress: "John.Doe@test.test",
+        Biography: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+      };
+    </script>
   </body>
 </html>
