@@ -3,7 +3,11 @@ The following custom properties and mixins are available for styling:
 
 Custom property | Description | Default
 ----------------|-------------|----------
-`--socobo-profile-page-XY` |  | `{}`
+`--socobo-profile-page-profile-container` | Styling the Profile Container that holds the Image and the Information. | `{}`
+`--socobo-profile-page-profile-image-container` | Styling the Image Holder Container | `{}`
+`--socobo-profile-page-profile-image-container-bg-color-from` | Styling the Gradient Color for the Background - From | `{#04212A}`
+`--socobo-profile-page-profile-image-container-bg-color-to` | Styling the Gradient Color for the Background - To | `{#062f3c}`
+`--socobo-profile-page-profile-info-container` | Styling the Information Holder Container | `{}`
 
 @demo demo/index.html
 -->
@@ -15,7 +19,8 @@ Custom property | Description | Default
     .profile-container {
       @apply(--layout-horizontal);
       width: 100%;
-      height: 100%
+      height: 100%;
+      @apply(--socobo-profile-page-profile-container);
     }
     .profile-image-container {
       @apply(--layout-horizontal);
@@ -23,16 +28,18 @@ Custom property | Description | Default
       width: 20%;
       height: 900px; /*100%;*/
       margin: 0;
-      background: -webkit-linear-gradient(#04212A, #062f3c);
-      background: -o-linear-gradient(#04212A, #062f3c);
-      background: -moz-linear-gradient(#04212A, #062f3c);
-      background: linear-gradient(#04212A, #062f3c);
+      background: -webkit-linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
+      background: -o-linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
+      background: -moz-linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
+      background: linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
+      @apply(--socobo-profile-page-profile-image-container);
     }
     .profile-info-container {
       @apply(--layout-vertical);
       width: 80%;
       height: 100%;
       margin: 0;
+      @apply(--socobo-profile-page-profile-info-container);
     }
   </style>
 
@@ -68,12 +75,21 @@ Custom property | Description | Default
     Polymer({
       is: 'socobo-profile-page',
 
+      /**
+       * Element Properties.
+       */
       properties: {
+        /**
+         * User Login Object
+         */
         userLogin: {
           type: Object,
           value: {},
           notify: true
         },
+        /**
+         * User Information Object
+         */
         userObject: {
           type: Object,
           value: {},
@@ -84,9 +100,10 @@ Custom property | Description | Default
        * PROFILE IMAGE
        */
       /**
-       * Profile Image Changed
-       * @param e
+       * Show Toast if the Profile Image is changed. <br/>
+       * @param {Object} e Message
        * @private
+       * @method _handleProfileImageChanged
        */
       _handleProfileImageChanged: function(e) {
         this.$.infoToast.text = e.detail.value;
@@ -100,6 +117,7 @@ Custom property | Description | Default
        *
        * @param e
        * @private
+       * @method _handleChangeEmailAddress
        */
       _handleChangeEmailAddress: function(e){
         alert(JSON.stringify(e.detail));
@@ -107,8 +125,9 @@ Custom property | Description | Default
 
       /**
        *
-       * @param e
+       * @param {Object} e
        * @private
+       * @method _handleChangePassword
        */
       _handleChangePassword: function(e) {
         alert(JSON.stringify(e.detail));
@@ -116,8 +135,9 @@ Custom property | Description | Default
 
       /**
        *
-       * @param e
+       * @param {Object} e
        * @private
+       * @method _handleResetPassword
        */
       _handleResetPassword: function(e) {
         alert(JSON.stringify(e.detail));
@@ -125,17 +145,19 @@ Custom property | Description | Default
 
       /**
        *
-       * @param e
+       * @param {Object} e
        * @private
+       * @method _handleDeleteAccount
        */
       _handleDeleteAccount: function(e) {
         alert(JSON.stringify(e.detail));
       },
 
       /**
-       *
-       * @param e
+       * Show Toast if the Passwords not matching. <br/>
+       * @param {Object} e Message
        * @private
+       * @method _handlePasswordsNotMatching
        */
       _handlePasswordsNotMatching: function(e) {
         this.$.infoToast.text = e.detail.value;

@@ -4,7 +4,7 @@ The following custom properties and mixins are available for styling:
 
 Custom property | Description | Default
 ----------------|-------------|----------
-`--socobo-profile-XY` |  | ``
+`--socobo-profile-profile-wrapper` | Styling the Main Element Wrapper Container. | `{}`
 
 @demo demo/index.html
 -->
@@ -13,16 +13,22 @@ Custom property | Description | Default
     :host {
       display: block;
       font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    .profile-wrapper {
       width: 100%;
       height: 900px; /*temp for developing (100%)*/
+      @apply(--socobo-profile-profile-wrapper);
     }
   </style>
 
   <template>
-    <socobo-profile-page id="profilePage"
-                         user-login="{{userLogin}}"
-                         user-object="{{userObject}}">
-    </socobo-profile-page>
+    <div class="profile-wrapper">
+      <socobo-profile-page
+        id="profilePage"
+        user-login="{{userLogin}}"
+        user-object="{{userObject}}">
+      </socobo-profile-page>
+    </div>
   </template>
 </dom-module>
 
@@ -43,13 +49,27 @@ Custom property | Description | Default
         notify: true
       },
       /**
-       * User Object
+       * User Information Object
        */
       userObject: {
         type: Object,
         value: {},
         notify: true
       }
+    },
+
+    /**
+     *
+     * @method loadProfileData
+     */
+    loadProfileData: function() {
+      SocoboProfile.getInstance(this, this.userLogin.firebaseUrl, this.userLogin.userId).loadProfileData()
+        .then(function(data){
+
+        })
+        .catch(function(err){
+
+        });
     }
   });
 })();
