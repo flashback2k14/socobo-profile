@@ -26,7 +26,10 @@ Custom property | Description | Default
       <socobo-profile-page
         id="profilePage"
         user-login="{{userLogin}}"
-        user-object="{{userObject}}">
+        profile-object="{{_profileObject}}"
+        on-profile-image-changed="_handleProfileDataChanged"
+        on-profile-user-info-changed="_handleProfileUserInfoChanged"
+        on-account-deleted="_handleAccountDeleted">
       </socobo-profile-page>
     </div>
   </template>
@@ -46,28 +49,67 @@ Custom property | Description | Default
             type: Object,
             value: {},
             notify: true
-          },
-          /**
-           * User Information Object
-           */
-          userObject: {
-            type: Object,
-            value: {},
-            notify: true
           }
         },
 
         /**
+         * User Profile Object
+         * @private
+         */
+        _profileObject: {},
+
+        /**
+         * PRIVATE FUNCTIONS
+         */
+        /**
          *
+         * @param e CustomEvent
+         * @private
+         * @method _handleProfileDataChanged
+         */
+        _handleProfileDataChanged: function(e) {
+          var profileImage = e.detail;
+          this.fire("profile-image-changed", profileImage);
+        },
+
+        /**
+         *
+         * @param e CustomEvent
+         * @private
+         * @method _handleProfileUserInfoChanged
+         */
+        _handleProfileUserInfoChanged: function(e) {
+          var tmp = e.detail;
+          this.fire("profile-user-info-changed", tmp);
+        },
+
+        /**
+         *
+         * @param e CustomEvent
+         * @private
+         * @method _handleAccountDeleted
+         */
+        _handleAccountDeleted: function(e) {
+          this.fire("account-deleted");
+        },
+
+        /**
+         * PUBLIC FUNCTIONS
+         */
+        /**
+         * Load User Profile Data from Firebase
          * @method loadProfileData
          */
-        loadProfileData: function() {
-          SocoboProfile.getInstance(this, this.userLogin.firebaseUrl, this.userLogin.userId).loadProfileData()
+        loadData: function() {
+          SocoboProfile
+            .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
+            .loadProfileData()
             .then(function(data){
-
-            })
+              this._profileObject = data;
+              this.fire("profile-data-changed", data);
+            }.bind(this))
             .catch(function(err){
-
+              console.dir(err);
             });
         }
       });

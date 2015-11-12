@@ -45,6 +45,7 @@ Custom property | Description | Default
         position: absolute !important;
         top: 48px;
         right: 48px;
+        z-index: 1;
       }
       .show-info {
         display: block;
@@ -88,6 +89,7 @@ Custom property | Description | Default
         position: absolute !important;
         top: 48px;
         right: 48px;
+        z-index: 1;
       }
       .style-label-user-biography {
         min-height: 50px;
@@ -151,21 +153,21 @@ Custom property | Description | Default
             <div id="showInfoStandard" class="show-info">
               <div class="vertical-line">
                 <label for="elUsername"><strong>Username</strong></label>
-                <span id="elUsername" class="style-el-info width-for-inputs">{{userObject.Username}}</span>
+                <span id="elUsername" class="style-el-info width-for-inputs">{{profileObject.name}}</span>
               </div>
               <div class="vertical-line">
                 <label for="elEmailAddress"><strong>Email-Address</strong></label>
-                <span id="elEmailAddress" class="style-el-info width-for-inputs">{{userObject.EmailAddress}}</span>
+                <span id="elEmailAddress" class="style-el-info width-for-inputs">{{profileObject.email}}</span>
               </div>
             </div>
             <div id="editInfoStandard" class="edit-info">
               <div class="vertical-line">
                 <label for="elUsername"><strong>Username</strong></label>
-                <paper-input id="txtUsername" class="width-for-inputs" label="Username" type="text" value="{{userObject.Username}}" no-label-float="true"></paper-input>
+                <paper-input id="txtUsername" class="width-for-inputs" label="Username" type="text" value="{{profileObject.name}}" no-label-float="true"></paper-input>
               </div>
               <div class="vertical-line">
                 <label for="elEmailAddress"><strong>Email-Address</strong></label>
-                <paper-input id="txtEmailAddress" class="width-for-inputs" label="Username" type="email" value="{{userObject.EmailAddress}}" no-label-float="true"></paper-input>
+                <paper-input id="txtEmailAddress" class="width-for-inputs" label="Username" type="email" value="{{profileObject.email}}" no-label-float="true"></paper-input>
               </div>
               <div class="bottom-right-align">
                 <paper-button id="btnSaveInfoStandard" class="style-save-button" on-tap="_saveInfoStandard" raised>Save</paper-button>
@@ -181,12 +183,12 @@ Custom property | Description | Default
           <div class="card-content">
             <div id="showInfoBio" class="show-info">
               <div class="vertical-line">
-                <span id="lblUserBiography" class="style-label-user-biography width-for-inputs">{{userObject.Biography}}</span>
+                <span id="lblUserBiography" class="style-label-user-biography width-for-inputs">{{profileObject.biography}}</span>
               </div>
             </div>
             <div id="editInfoBio" class="edit-info">
               <div class="vertical-line">
-                <paper-textarea id="txtBiography" class="width-for-inputs" rows="5" max-rows="4" value="{{userObject.Biography}}" placeholder="Please tell us something about you!" no-label-float="true"></paper-textarea>
+                <paper-textarea id="txtBiography" class="width-for-inputs" rows="5" max-rows="4" value="{{profileObject.biography}}" placeholder="Please tell us something about you!" no-label-float="true"></paper-textarea>
               </div>
               <div class="bottom-right-align">
                 <paper-button id="btnSaveInfoBiography" class="style-save-button" on-tap="_saveInfoBiography" raised>Save</paper-button>
@@ -196,74 +198,74 @@ Custom property | Description | Default
         </paper-card>
       </div>
       <!-- Administration Section -->
-      <template is="dom-if" if="{{_checkUserLoginProvider(userObject)}}">
-        <div class="profile-info-admin">
-          <paper-card class="style-paper-card paper-card-height-large" heading="Adminstration" elevation="3">
-            <div class="card-content">
-              <div class="main-admin-container">
-                <div class="left-admin-container">
+      <div class="profile-info-admin">
+        <paper-card class="style-paper-card paper-card-height-large" heading="Adminstration" elevation="3">
+          <div class="card-content">
+            <div class="main-admin-container">
+              <div class="left-admin-container">
+                <template is="dom-if" if="{{_checkUserLoginProvider(profileObject)}}">
                   <paper-button id="btnChangeEmailAddress" class="style-admin-buttons" on-tap="_changeEmailAddress">Change Email Address</paper-button>
                   <paper-button id="btnChangePassword" class="style-admin-buttons" on-tap="_changePassword">Change Password</paper-button>
                   <paper-button id="btnResetPassword" class="style-admin-buttons" on-tap="_resetPassword">Reset Password</paper-button>
-                  <paper-button id="btnDeleteAccount" class="style-admin-buttons" on-tap="_deleteAccount">Delete Account</paper-button>
-                </div>
-                <div class="right-admin-container">
-                  <div id="rightAdminContainer" class="hide-right-admin-container">
-                    <paper-input
-                      id="txtOldEmailAddress"
-                      class="style-admin-inputs hide-right-admin-container"
-                      label="Old Emailaddress"
-                      type="email"
-                      no-label-float="true"
-                      auto-validate
-                      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                      error-message="no valid emailaddress">
-                    </paper-input>
-                    <paper-input
-                      id="txtNewEmailAddress"
-                      class="style-admin-inputs hide-right-admin-container"
-                      label="New Emailaddress"
-                      type="email"
-                      no-label-float="true"
-                      auto-validate
-                      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                      error-message="no valid emailaddress">
-                    </paper-input>
-                    <paper-input
-                      id="txtOldPassword"
-                      class="style-admin-inputs hide-right-admin-container"
-                      label="Old Password"
-                      type="password"
-                      no-label-float="true"
-                      char-counter auto-validate
-                      pattern=".+"
-                      minlength="8"
-                      maxlength="30"
-                      error-message="min. 8 character">
-                    </paper-input>
-                    <paper-input
-                      id="txtNewPassword"
-                      class="style-admin-inputs hide-right-admin-container"
-                      label="New Password"
-                      type="password"
-                      no-label-float="true"
-                      char-counter auto-validate
-                      pattern=".+"
-                      minlength="8"
-                      maxlength="30"
-                      error-message="min. 8 character">
-                    </paper-input>
-                    <div class="btn-submit-container">
-                      <paper-button id="btnClearAdminChanges" class="style-clear-button" on-tap="_clearAdminChanges" raised>Clear</paper-button>
-                      <paper-button id="btnSubmitAdminChanges" class="style-save-button" on-tap="_submitAdminChanges" raised>Submit</paper-button>
-                    </div>
+                </template>
+                <paper-button id="btnDeleteAccount" class="style-admin-buttons" on-tap="_deleteAccount">Delete Account</paper-button>
+              </div>
+              <div class="right-admin-container">
+                <div id="rightAdminContainer" class="hide-right-admin-container">
+                  <paper-input
+                    id="txtOldEmailAddress"
+                    class="style-admin-inputs hide-right-admin-container"
+                    label="Old Emailaddress"
+                    type="email"
+                    no-label-float="true"
+                    auto-validate
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                    error-message="no valid emailaddress">
+                  </paper-input>
+                  <paper-input
+                    id="txtNewEmailAddress"
+                    class="style-admin-inputs hide-right-admin-container"
+                    label="New Emailaddress"
+                    type="email"
+                    no-label-float="true"
+                    auto-validate
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                    error-message="no valid emailaddress">
+                  </paper-input>
+                  <paper-input
+                    id="txtOldPassword"
+                    class="style-admin-inputs hide-right-admin-container"
+                    label="Old Password"
+                    type="password"
+                    no-label-float="true"
+                    char-counter auto-validate
+                    pattern=".+"
+                    minlength="8"
+                    maxlength="30"
+                    error-message="min. 8 character">
+                  </paper-input>
+                  <paper-input
+                    id="txtNewPassword"
+                    class="style-admin-inputs hide-right-admin-container"
+                    label="New Password"
+                    type="password"
+                    no-label-float="true"
+                    char-counter auto-validate
+                    pattern=".+"
+                    minlength="8"
+                    maxlength="30"
+                    error-message="min. 8 character">
+                  </paper-input>
+                  <div class="btn-submit-container">
+                    <paper-button id="btnClearAdminChanges" class="style-clear-button" on-tap="_clearAdminChanges" raised>Clear</paper-button>
+                    <paper-button id="btnSubmitAdminChanges" class="style-save-button" on-tap="_submitAdminChanges" raised>Submit</paper-button>
                   </div>
                 </div>
               </div>
             </div>
-          </paper-card>
-        </div>
-      </template>
+          </div>
+        </paper-card>
+      </div>
     </div>
   </template>
 
@@ -313,7 +315,7 @@ Custom property | Description | Default
           /**
            * User Information Object
            */
-          userObject: {
+          profileObject: {
             type: Object,
             value: {},
             notify: true
@@ -357,8 +359,8 @@ Custom property | Description | Default
          */
         _saveInfoStandard: function() {
           var obj = {
-            usernameValue: this.$.txtUsername.value,
-            emailAddressValue: this.$.txtEmailAddress.value
+            name: this.$.txtUsername.value,
+            email: this.$.txtEmailAddress.value
           };
           this.fire("save-info-standard", obj);
         },
@@ -368,7 +370,7 @@ Custom property | Description | Default
          * @method _saveInfoBiography
          */
         _saveInfoBiography: function() {
-          this.fire("save-info-biography", {bioValue: this.$.txtBiography.value});
+          this.fire("save-info-biography", {biography: this.$.txtBiography.value});
         },
 
         /**
@@ -489,7 +491,6 @@ Custom property | Description | Default
             default:
               alert("no valid operation chosen!");
           }
-
           this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
         },
         /**

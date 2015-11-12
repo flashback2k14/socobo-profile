@@ -49,7 +49,7 @@ Custom property | Description | Default
       <div class="profile-image-container">
         <socobo-profile-image
           id="profileImage"
-          image-source="{{userObject.profileImage}}"
+          image-source="{{profileObject.profileImage}}"
           on-profile-image-changed="_handleProfileImageChanged">
         </socobo-profile-image>
       </div>
@@ -57,7 +57,9 @@ Custom property | Description | Default
       <div class="profile-info-container">
         <socobo-profile-info
           id="profileInfo"
-          user-object="{{userObject}}"
+          profile-object="{{profileObject}}"
+          on-save-info-standard="_handleSaveInfoStandard"
+          on-save-info-biography="_handleSaveInfoBiography"
           on-change-email-address="_handleChangeEmailAddress"
           on-change-password="_handleChangePassword"
           on-reset-password="_handleResetPassword"
@@ -90,12 +92,13 @@ Custom property | Description | Default
           /**
            * User Information Object
            */
-          userObject: {
+          profileObject: {
             type: Object,
             value: {},
             notify: true
           }
         },
+
         /**
          * PROFILE IMAGE
          */
@@ -106,12 +109,46 @@ Custom property | Description | Default
          * @method _handleProfileImageChanged
          */
         _handleProfileImageChanged: function(e) {
-          this.$.infoToast.text = e.detail.value;
-          this.$.infoToast.toggle();
+          Util.getInstance(this).showToast(this.$.infoToast, e.detail.value, "#333333", "#EEEEEE");
+          this.fire("profile-image-changed", this.profileObject.profileImage);
         },
 
         /**
          * PROFILE INFO
+         */
+        /**
+         * USER INFO
+         */
+        _handleSaveInfoStandard: function(e) {
+          SocoboProfile
+            .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
+            .updateProfileData(e.detail)
+            .then(function(succ) {
+              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#2EB82E", "#EEEEEE");
+              this.fire("profile-user-info-changed", e.detail);
+            }.bind(this))
+            .catch(function(err) {
+              Util.getInstance(this).showToast(this.$.infoToast, err.message, "#FF3333", "#EEEEEE");
+            }.bind(this));
+        },
+
+        /**
+         * USER BIOGRAPHY
+         */
+        _handleSaveInfoBiography: function(e) {
+          SocoboProfile
+            .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
+            .updateProfileData(e.detail)
+            .then(function(succ) {
+              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#2EB82E", "#EEEEEE");
+            }.bind(this))
+            .catch(function(err) {
+              Util.getInstance(this).showToast(this.$.infoToast, err.message, "#FF3333", "#EEEEEE");
+            }.bind(this));
+        },
+
+        /**
+         * ADMINISTRATION
          */
         /**
          *
@@ -120,9 +157,16 @@ Custom property | Description | Default
          * @method _handleChangeEmailAddress
          */
         _handleChangeEmailAddress: function(e){
-          alert(JSON.stringify(e.detail));
+          SocoboProfile
+            .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
+            .changeUserEmailAddress(e.detail)
+            .then(function(succ) {
+              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#2EB82E", "#EEEEEE");
+            }.bind(this))
+            .catch(function(err) {
+              Util.getInstance(this).showToast(this.$.infoToast, err.value, "#FF3333", "#EEEEEE");
+            }.bind(this));
         },
-
         /**
          *
          * @param {Object} e
@@ -130,9 +174,16 @@ Custom property | Description | Default
          * @method _handleChangePassword
          */
         _handleChangePassword: function(e) {
-          alert(JSON.stringify(e.detail));
+          SocoboProfile
+            .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
+            .changeUserPassword(e.detail)
+            .then(function(succ) {
+              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#2EB82E", "#EEEEEE");
+            }.bind(this))
+            .catch(function(err) {
+              Util.getInstance(this).showToast(this.$.infoToast, err.value, "#FF3333", "#EEEEEE");
+            }.bind(this));
         },
-
         /**
          *
          * @param {Object} e
@@ -140,9 +191,16 @@ Custom property | Description | Default
          * @method _handleResetPassword
          */
         _handleResetPassword: function(e) {
-          alert(JSON.stringify(e.detail));
+          SocoboProfile
+            .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
+            .resetUserPassword(e.detail)
+            .then(function(succ) {
+              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#2EB82E", "#EEEEEE");
+            }.bind(this))
+            .catch(function(err) {
+              Util.getInstance(this).showToast(this.$.infoToast, err.value, "#FF3333", "#EEEEEE");
+            }.bind(this));
         },
-
         /**
          *
          * @param {Object} e
@@ -150,9 +208,18 @@ Custom property | Description | Default
          * @method _handleDeleteAccount
          */
         _handleDeleteAccount: function(e) {
-          alert(JSON.stringify(e.detail));
+          // ToDo: Add Confirm Dialog
+          SocoboProfile
+            .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
+            .removeUserAccount(e.detail)
+            .then(function(succ) {
+              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#2EB82E", "#EEEEEE");
+              this.fire("account-deleted");
+            }.bind(this))
+            .catch(function(err) {
+              Util.getInstance(this).showToast(this.$.infoToast, err.value, "#FF3333", "#EEEEEE");
+            }.bind(this));
         },
-
         /**
          * Show Toast if the Passwords not matching. <br/>
          * @param {Object} e Message
@@ -160,8 +227,7 @@ Custom property | Description | Default
          * @method _handlePasswordsNotMatching
          */
         _handlePasswordsNotMatching: function(e) {
-          this.$.infoToast.text = e.detail.value;
-          this.$.infoToast.toggle();
+          Util.getInstance(this).showToast(this.$.infoToast, e.detail.value, "#FF3333", "#EEEEEE");
         }
       });
     })();
