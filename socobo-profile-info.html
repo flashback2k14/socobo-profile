@@ -1,3 +1,4 @@
+<link rel="import" href="elements.html">
 <!--
 The following custom properties and mixins are available for styling:
 
@@ -8,139 +9,139 @@ Custom property | Description | Default
 @demo demo/index.html
 -->
 <dom-module id="socobo-profile-info">
-  <style>
-    :host {
-      display: block;
-    }
-    .profile-info-container {
-      @apply(--layout-vertical);
-    }
-    .style-paper-card {
-      --paper-card-header: {
-        background: #062f3c;
-      };
-      --paper-card-header-text: {
-        margin-left: 20px;
-        font-size: 35px;
-        color: #fff;
-      };
-      --paper-card-content: {
-         font-size: 20px;
-      };
-    }
-    .paper-card-height-normal {
-      height: 230px;
-    }
-    .paper-card-height-large {
-      height: 400px;
-    }
-    /*USER INFO*/
-    .profile-info-standard {
-      @apply(--layout-vertical);
-      margin: 0 20px;
-    }
-    .style-fab-edit-info-standard {
-      position: absolute !important;
-      top: 48px;
-      right: 48px;
-    }
-    .show-info {
-      display: block;
-      margin-top: -15px;
-    }
-    .edit-info {
-      display: none;
-    }
-    .vertical-line {
-      @apply(--layout-vertical);
-      margin: 10px 20px 5px 20px;
-    }
-    .style-el-info {
-      margin-top: 5px;
-    }
-    .bottom-right-align {
-      position: absolute !important;
-      right: 30px;
-      bottom: 30px;
-    }
-    .style-save-button {
-      --paper-button: {
-        background: var(--paper-green-500);
-        color: #ffffff;
-        font-size: medium;
-      };
-    }
-    .style-clear-button {
-      --paper-button: {
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .profile-info-container {
+        @apply(--layout-vertical);
+      }
+      .style-paper-card {
+        --paper-card-header: {
+           background: #062f3c;
+         };
+        --paper-card-header-text: {
+           margin-left: 20px;
+           font-size: 35px;
+           color: #fff;
+         };
+        --paper-card-content: {
+           font-size: 20px;
+         };
+      }
+      .paper-card-height-normal {
+        height: 230px;
+      }
+      .paper-card-height-large {
+        height: 400px;
+      }
+      /*USER INFO*/
+      .profile-info-standard {
+        @apply(--layout-vertical);
+        margin: 0 20px;
+      }
+      .style-fab-edit-info-standard {
+        position: absolute !important;
+        top: 48px;
+        right: 48px;
+      }
+      .show-info {
+        display: block;
+        margin-top: -15px;
+      }
+      .edit-info {
+        display: none;
+      }
+      .vertical-line {
+        @apply(--layout-vertical);
+        margin: 10px 20px 5px 20px;
+      }
+      .style-el-info {
+        margin-top: 5px;
+      }
+      .bottom-right-align {
+        position: absolute !important;
+        right: 30px;
+        bottom: 30px;
+      }
+      .style-save-button {
+        --paper-button: {
+         background: var(--paper-green-500);
+         color: #ffffff;
+         font-size: medium;
+       };
+      }
+      .style-clear-button {
+        --paper-button: {
          background: var(--paper-pink-500);
          color: #ffffff;
          font-size: medium;
-     };
-    }
-    /*USER BIOGRAPHY*/
-    .profile-info-biography {
-      @apply(--layout-vertical);
-      margin: 20px 20px;
-    }
-    .style-fab-edit-info-biography {
-      position: absolute !important;
-      top: 48px;
-      right: 48px;
-    }
-    .style-label-user-biography {
-      min-height: 50px;
-      height: 50px;
-      max-height: 50px;
-      overflow: auto;
-    }
-    .width-for-inputs {
-      width: 80%;
-    }
-    /*USER ADMINISTRATION*/
-    .profile-info-admin {
-      @apply(--layout-vertical);
-      margin: 0 20px;
-    }
-    .main-admin-container {
-      @apply(--layout-horizontal);
-    }
-    .left-admin-container {
-      @apply(--layout-vertical);
-      width: 25%;
-      margin: 30px 10px 0 15px;
-    }
-    .style-admin-buttons {
-      --paper-button: {
-        background: var(--paper-indigo-700);
-        color: #ffffff;
-        font-size: medium;
+       };
+      }
+      /*USER BIOGRAPHY*/
+      .profile-info-biography {
+        @apply(--layout-vertical);
+        margin: 20px 20px;
+      }
+      .style-fab-edit-info-biography {
+        position: absolute !important;
+        top: 48px;
+        right: 48px;
+      }
+      .style-label-user-biography {
+        min-height: 50px;
+        height: 50px;
+        max-height: 50px;
+        overflow: auto;
+      }
+      .width-for-inputs {
+        width: 80%;
+      }
+      /*USER ADMINISTRATION*/
+      .profile-info-admin {
+        @apply(--layout-vertical);
+        margin: 0 20px;
+      }
+      .main-admin-container {
+        @apply(--layout-horizontal);
+      }
+      .left-admin-container {
+        @apply(--layout-vertical);
+        width: 25%;
+        margin: 30px 10px 0 15px;
+      }
+      .style-admin-buttons {
+        --paper-button: {
+         background: var(--paper-indigo-700);
+         color: #ffffff;
+         font-size: medium;
+         margin-bottom: 15px;
+       };
+      }
+      .right-admin-container {
+        @apply(--layout-vertical);
+        width: 75%;
+        margin: 30px 10px 0 30px;
+      }
+      .show-right-admin-container {
+        display: block;
+      }
+      .hide-right-admin-container {
+        display: none;
+      }
+      .style-admin-inputs {
+        width: 70%;
         margin-bottom: 15px;
-      };
-    }
-    .right-admin-container {
-      @apply(--layout-vertical);
-      width: 75%;
-      margin: 30px 10px 0 30px;
-    }
-    .show-right-admin-container {
-      display: block;
-    }
-    .hide-right-admin-container {
-      display: none;
-    }
-    .style-admin-inputs {
-      width: 70%;
-      margin-bottom: 15px;
-    }
-    .btn-submit-container {
-      @apply(--layout-horizontal);
-      @apply(--layout-end-justified);
-      width: 70%;
-      margin-top: 20px;
-    }
-  </style>
+      }
+      .btn-submit-container {
+        @apply(--layout-horizontal);
+        @apply(--layout-end-justified);
+        width: 70%;
+        margin-top: 20px;
+      }
+    </style>
 
-  <template>
     <div class="profile-info-container">
       <!-- Information Section -->
       <div class="profile-info-standard">
@@ -265,244 +266,244 @@ Custom property | Description | Default
       </template>
     </div>
   </template>
-</dom-module>
 
-<script>
-  (function() {
-    Polymer({
-      is: 'socobo-profile-info',
-      /**
-       * This Event is fired if the save User Infos button is pressed. <br/>
-       * `Detail`: changed User Infos {Object} <br/>
-       * @event save-info-standard
-       */
-      /**
-       * This Event is fired if the save User Biography button is pressed. <br/>
-       * `Detail`: changed User Biography {Object} <br/>
-       * @event save-info-biography
-       */
-      /**
-       * This Event is fired if the Change Email Address button is pressed. <br/>
-       * `Detail`: changed User Administration Infos {Object} <br/>
-       * @event change-email-address
-       */
-      /**
-       * This Event is fired if the Change Password button is pressed. <br/>
-       * `Detail`: changed User Administration Infos {Object} <br/>
-       * @event change-password
-       */
-      /**
-       * This Event is fired if the Passwords not matching. <br/>
-       * @event passwords-not-matching
-       */
-      /**
-       * This Event is fired if the Reset Password button is pressed. <br/>
-       * `Detail`: changed User Administration Infos {Object} <br/>
-       * @event reset-password
-       */
-      /**
-       * This Event is fired if the Delete Account button is pressed. <br/>
-       * `Detail`: changed User Administration Infos {Object} <br/>
-       * @event delete-account
-       */
-
-      /**
-       * Element Properties
-       */
-      properties: {
+  <script>
+    (function() {
+      Polymer({
+        is: 'socobo-profile-info',
         /**
-         * User Information Object
+         * This Event is fired if the save User Infos button is pressed. <br/>
+         * `Detail`: changed User Infos {Object} <br/>
+         * @event save-info-standard
          */
-        userObject: {
-          type: Object,
-          value: {},
-          notify: true
-        }
-      },
+        /**
+         * This Event is fired if the save User Biography button is pressed. <br/>
+         * `Detail`: changed User Biography {Object} <br/>
+         * @event save-info-biography
+         */
+        /**
+         * This Event is fired if the Change Email Address button is pressed. <br/>
+         * `Detail`: changed User Administration Infos {Object} <br/>
+         * @event change-email-address
+         */
+        /**
+         * This Event is fired if the Change Password button is pressed. <br/>
+         * `Detail`: changed User Administration Infos {Object} <br/>
+         * @event change-password
+         */
+        /**
+         * This Event is fired if the Passwords not matching. <br/>
+         * @event passwords-not-matching
+         */
+        /**
+         * This Event is fired if the Reset Password button is pressed. <br/>
+         * `Detail`: changed User Administration Infos {Object} <br/>
+         * @event reset-password
+         */
+        /**
+         * This Event is fired if the Delete Account button is pressed. <br/>
+         * `Detail`: changed User Administration Infos {Object} <br/>
+         * @event delete-account
+         */
 
-      /**
-       * Variable to manage Admin Section State
-       * @private
-       */
-      _adminSection: "",
-      /**
-       * Variable to hold changed Input Field Values
-       * @private
-       */
-      _changeValues: {},
+        /**
+         * Element Properties
+         */
+        properties: {
+          /**
+           * User Information Object
+           */
+          userObject: {
+            type: Object,
+            value: {},
+            notify: true
+          }
+        },
 
-      /**
-       * Function for Show / Hide Edit Information Section
-       * @param {Object} e FAB
-       * @private
-       * @method _editInfoStandard
-       */
-      _editInfoStandard: function(e) {
-        Util.getInstance(this).toggleInformationArea(e);
-      },
-      /**
-       * Function for Show / Hide Edit Biography Section
-       * @param {Object} e FAB
-       * @private
-       * @method _editInfoBiography
-       */
-      _editInfoBiography: function(e) {
-        Util.getInstance(this).toggleInformationArea(e);
-      },
+        /**
+         * Variable to manage Admin Section State
+         * @private
+         */
+        _adminSection: "",
+        /**
+         * Variable to hold changed Input Field Values
+         * @private
+         */
+        _changeValues: {},
 
-      /**
-       * Function for Fire Event to Save Information changes.
-       * @private
-       * @method _saveInfoStandard
-       */
-      _saveInfoStandard: function() {
-        var obj = {
-          usernameValue: this.$.txtUsername.value,
-          emailAddressValue: this.$.txtEmailAddress.value
-        };
-        this.fire("save-info-standard", obj);
-      },
-      /**
-       * Function for Fire Event to Save Biography changes.
-       * @private
-       * @method _saveInfoBiography
-       */
-      _saveInfoBiography: function() {
-        this.fire("save-info-biography", {bioValue: this.$.txtBiography.value});
-      },
+        /**
+         * Function for Show / Hide Edit Information Section
+         * @param {Object} e FAB
+         * @private
+         * @method _editInfoStandard
+         */
+        _editInfoStandard: function(e) {
+          Util.getInstance(this).toggleInformationArea(e);
+        },
+        /**
+         * Function for Show / Hide Edit Biography Section
+         * @param {Object} e FAB
+         * @private
+         * @method _editInfoBiography
+         */
+        _editInfoBiography: function(e) {
+          Util.getInstance(this).toggleInformationArea(e);
+        },
 
-      /**
-       * Function for show Admin section only if the user is logged in with emailaddress.
-       * @param {Object} obj User Object
-       * @private
-       * @method _checkUserLoginProvider
-       */
-      _checkUserLoginProvider: function(obj) {
-        if (typeof obj !== 'undefined') {
-          return obj.provider === "password";
-        }
-      },
+        /**
+         * Function for Fire Event to Save Information changes.
+         * @private
+         * @method _saveInfoStandard
+         */
+        _saveInfoStandard: function() {
+          var obj = {
+            usernameValue: this.$.txtUsername.value,
+            emailAddressValue: this.$.txtEmailAddress.value
+          };
+          this.fire("save-info-standard", obj);
+        },
+        /**
+         * Function for Fire Event to Save Biography changes.
+         * @private
+         * @method _saveInfoBiography
+         */
+        _saveInfoBiography: function() {
+          this.fire("save-info-biography", {bioValue: this.$.txtBiography.value});
+        },
 
-      /**
-       * Toggle Change Email Address Section
-       * @param {Object} e Button
-       * @private
-       * @member _changeEmailAddress
-       */
-      _changeEmailAddress: function(e) {
-        this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
-      },
-      /**
-       * Toggle Change Password
-       * @param {Object} e Button
-       * @private
-       * @method _changePassword
-       */
-      _changePassword: function(e) {
-        this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
-      },
-      /**
-       * Toggle Reset Password Section
-       * @param {Object} e Button
-       * @private
-       * @method _resetPassword
-       */
-      _resetPassword: function(e) {
-        this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
-      },
-      /**
-       * Toggle Delete Account Section
-       * @param {Object} e Button
-       * @private
-       * @method _deleteAccount
-       */
-      _deleteAccount: function(e) {
-        this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
-      },
+        /**
+         * Function for show Admin section only if the user is logged in with emailaddress.
+         * @param {Object} obj User Object
+         * @private
+         * @method _checkUserLoginProvider
+         */
+        _checkUserLoginProvider: function(obj) {
+          if (typeof obj !== 'undefined') {
+            return obj.provider === "password";
+          }
+        },
 
-      /**
-       * Function to submit changes
-       * @param {Object} e Button
-       * @private
-       * @method _submitAdminChanges
-       */
-      _submitAdminChanges: function(e) {
-        var txtOldEmailAddress = document.querySelector("#txtOldEmailAddress");
-        var txtNewEmailAddress = document.querySelector("#txtNewEmailAddress");
-        var txtOldPassword = document.querySelector("#txtOldPassword");
-        var txtNewPassword = document.querySelector("#txtNewPassword");
+        /**
+         * Toggle Change Email Address Section
+         * @param {Object} e Button
+         * @private
+         * @member _changeEmailAddress
+         */
+        _changeEmailAddress: function(e) {
+          this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
+        },
+        /**
+         * Toggle Change Password
+         * @param {Object} e Button
+         * @private
+         * @method _changePassword
+         */
+        _changePassword: function(e) {
+          this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
+        },
+        /**
+         * Toggle Reset Password Section
+         * @param {Object} e Button
+         * @private
+         * @method _resetPassword
+         */
+        _resetPassword: function(e) {
+          this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
+        },
+        /**
+         * Toggle Delete Account Section
+         * @param {Object} e Button
+         * @private
+         * @method _deleteAccount
+         */
+        _deleteAccount: function(e) {
+          this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
+        },
 
-        switch (this._adminSection) {
-          case "ChangeEmailAddress":
-            this._changeValues = {
-              type: "ChangeEmailAddress",
-              oldMail: txtOldEmailAddress.value,
-              newMail: txtNewEmailAddress.value,
-              oldPwd: txtOldPassword.value
-            };
-            this.fire("change-email-address", this._changeValues);
-            txtOldEmailAddress.value = "";
-            txtNewEmailAddress.value = "";
-            txtOldPassword.value = "";
-            this._changeValues = {};
-            break;
-          case "ChangePassword":
-            if (Util.getInstance(this).arePasswordsMatching(txtOldPassword.value, txtNewPassword.value)) {
+        /**
+         * Function to submit changes
+         * @param {Object} e Button
+         * @private
+         * @method _submitAdminChanges
+         */
+        _submitAdminChanges: function(e) {
+          var txtOldEmailAddress = document.querySelector("#txtOldEmailAddress");
+          var txtNewEmailAddress = document.querySelector("#txtNewEmailAddress");
+          var txtOldPassword = document.querySelector("#txtOldPassword");
+          var txtNewPassword = document.querySelector("#txtNewPassword");
+
+          switch (this._adminSection) {
+            case "ChangeEmailAddress":
               this._changeValues = {
-                type: "ChangePassword",
+                type: "ChangeEmailAddress",
                 oldMail: txtOldEmailAddress.value,
-                oldPwd: txtOldPassword.value,
-                newPwd: txtNewPassword.value
+                newMail: txtNewEmailAddress.value,
+                oldPwd: txtOldPassword.value
               };
+              this.fire("change-email-address", this._changeValues);
+              txtOldEmailAddress.value = "";
+              txtNewEmailAddress.value = "";
+              txtOldPassword.value = "";
+              this._changeValues = {};
+              break;
+            case "ChangePassword":
+              if (Util.getInstance(this).arePasswordsMatching(txtOldPassword.value, txtNewPassword.value)) {
+                this._changeValues = {
+                  type: "ChangePassword",
+                  oldMail: txtOldEmailAddress.value,
+                  oldPwd: txtOldPassword.value,
+                  newPwd: txtNewPassword.value
+                };
+                txtOldEmailAddress.value = "";
+                txtOldPassword.value = "";
+                txtNewPassword.value = "";
+                this.fire("change-password", this._changeValues);
+              } else {
+                this.fire("passwords-not-matching", {value: "Passwords not matching!"});
+                txtOldPassword.value = "";
+                txtNewPassword.value = "";
+                this._changeValues = {};
+                return;
+              }
+              break;
+            case "ResetPassword":
+              this._changeValues = {
+                type: "ResetPassword",
+                oldMail: txtOldEmailAddress.value
+              };
+              this.fire("reset-password", this._changeValues);
+              txtOldEmailAddress.value = "";
+              this._changeValues = {};
+              break;
+            case "DeleteAccount":
+              this._changeValues = {
+                type: "DeleteAccount",
+                oldMail: txtOldEmailAddress.value,
+                oldPwd: txtOldPassword.value
+              };
+              this.fire("delete-account", this._changeValues);
               txtOldEmailAddress.value = "";
               txtOldPassword.value = "";
-              txtNewPassword.value = "";
-              this.fire("change-password", this._changeValues);
-            } else {
-              this.fire("passwords-not-matching", {value: "Passwords not matching!"});
-              txtOldPassword.value = "";
-              txtNewPassword.value = "";
               this._changeValues = {};
-              return;
-            }
-            break;
-          case "ResetPassword":
-            this._changeValues = {
-              type: "ResetPassword",
-              oldMail: txtOldEmailAddress.value
-            };
-            this.fire("reset-password", this._changeValues);
-            txtOldEmailAddress.value = "";
-            this._changeValues = {};
-            break;
-          case "DeleteAccount":
-            this._changeValues = {
-              type: "DeleteAccount",
-              oldMail: txtOldEmailAddress.value,
-              oldPwd: txtOldPassword.value
-            };
-            this.fire("delete-account", this._changeValues);
-            txtOldEmailAddress.value = "";
-            txtOldPassword.value = "";
-            this._changeValues = {};
-            break;
-          default:
-            alert("no valid operation chosen!");
-        }
+              break;
+            default:
+              alert("no valid operation chosen!");
+          }
 
-        this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
-      },
-      /**
-       * Clear Input Fields
-       * @private
-       * @method _clearAdminChanges
-       */
-      _clearAdminChanges: function() {
-        document.querySelector("#txtOldEmailAddress").value = "";
-        document.querySelector("#txtNewEmailAddress").value = "";
-        document.querySelector("#txtOldPassword").value = "";
-        document.querySelector("#txtNewPassword").value = "";
-      }
-    });
-  })();
-</script>
+          this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
+        },
+        /**
+         * Clear Input Fields
+         * @private
+         * @method _clearAdminChanges
+         */
+        _clearAdminChanges: function() {
+          document.querySelector("#txtOldEmailAddress").value = "";
+          document.querySelector("#txtNewEmailAddress").value = "";
+          document.querySelector("#txtOldPassword").value = "";
+          document.querySelector("#txtNewPassword").value = "";
+        }
+      });
+    })();
+  </script>
+</dom-module>

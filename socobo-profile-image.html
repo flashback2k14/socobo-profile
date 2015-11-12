@@ -1,3 +1,4 @@
+<link rel="import" href="elements.html">
 <!--
 The following custom properties and mixins are available for styling:
 
@@ -9,46 +10,46 @@ Custom property | Description | Default
 @demo demo/index.html
 -->
 <dom-module id="socobo-profile-image">
-  <style>
-    :host {
-      display: block;
-    }
-    .image-holder-container {
-      @apply(--layout-vertical);
-      margin: 40px 20px 0 20px;
-      width: 300px;
-      height: 300px;
-      @apply(--socobo-profile-image-image-holder-container);
-    }
-    .image-holder-container:hover {
-      cursor: pointer;
-    }
-    .image-container {
-      @apply(--socobo-profile-image-image-container);
-    }
-    .circular {
-      display: inline-block;
-      height: 300px;
-      width: 300px;
-      overflow: hidden;
-      -webkit-border-radius: 150px;
-      -moz-border-radius: 150px;
-      border-radius: 50%;
-      -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
-      -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
-      box-shadow: 0 0 8px rgba(0, 0, 0, .8);
-    }
-    .circular:hover {
-      -webkit-box-shadow: 0 0 8px rgb(120, 144, 156);
-      -moz-box-shadow: 0 0 8px rgb(120, 144, 156);
-      box-shadow: 0 0 8px rgb(120, 144, 156);
-    }
-    .hide-file-chooser {
-      display: none;
-    }
-  </style>
-
   <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .image-holder-container {
+        @apply(--layout-vertical);
+        margin: 40px 20px 0 20px;
+        width: 300px;
+        height: 300px;
+        @apply(--socobo-profile-image-image-holder-container);
+      }
+      .image-holder-container:hover {
+        cursor: pointer;
+      }
+      .image-container {
+        @apply(--socobo-profile-image-image-container);
+      }
+      .circular {
+        display: inline-block;
+        height: 300px;
+        width: 300px;
+        overflow: hidden;
+        -webkit-border-radius: 150px;
+        -moz-border-radius: 150px;
+        border-radius: 50%;
+        -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+        -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+        box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+      }
+      .circular:hover {
+        -webkit-box-shadow: 0 0 8px rgb(120, 144, 156);
+        -moz-box-shadow: 0 0 8px rgb(120, 144, 156);
+        box-shadow: 0 0 8px rgb(120, 144, 156);
+      }
+      .hide-file-chooser {
+        display: none;
+      }
+    </style>
+
     <div class="image-holder-container">
       <div class="image-container">
         <iron-image
@@ -65,60 +66,60 @@ Custom property | Description | Default
       <input id="fileChooser" type="file" class="hide-file-chooser" on-change="_getImage" />
     </div>
   </template>
-</dom-module>
 
-<script>
-  (function() {
-    Polymer({
-      is: 'socobo-profile-image',
-      /**
-       * This Event is fired if the profile image is changed. <br/>
-       * @event profile-image-changed
-       */
-      /**
-       * Element Properties.
-       */
-      properties: {
+  <script>
+    (function() {
+      Polymer({
+        is: 'socobo-profile-image',
         /**
-         * Image Source from User Object.
+         * This Event is fired if the profile image is changed. <br/>
+         * @event profile-image-changed
          */
-        imageSource: {
-          type: String,
-          notify: true
+        /**
+         * Element Properties.
+         */
+        properties: {
+          /**
+           * Image Source from User Object.
+           */
+          imageSource: {
+            type: String,
+            notify: true
+          }
+        },
+        /**
+         * Open File chooser to get a new Profile Image. <br/>
+         * @private <br/>
+         * @method _openFileChooser
+         */
+        _openFileChooser: function() {
+          this.$.fileChooser.click();
+        },
+        /**
+         * Get Image from File chooser and fire custom event. <br/>
+         * @private <br/>
+         * @method _getImage
+         */
+        _getImage: function() {
+          // get selected files
+          var fileSelected = this.$.fileChooser.files;
+          if (fileSelected.length > 0) {
+            // get specific file
+            var fileToLoad = fileSelected[0];
+            // create file reader
+            var fileReader = new FileReader();
+            // create load listener
+            fileReader.onload = function(e) {
+              // data: base64
+              var srcData = e.target.result;
+              this.imageSource = srcData;
+              this.fire("profile-image-changed", {value: "Profile Image changed!"});
+            }.bind(this)
+            // register listener
+            fileReader.readAsDataURL(fileToLoad);
+          }
         }
-      },
-      /**
-       * Open File chooser to get a new Profile Image. <br/>
-       * @private <br/>
-       * @method _openFileChooser
-       */
-      _openFileChooser: function() {
-        this.$.fileChooser.click();
-      },
-      /**
-       * Get Image from File chooser and fire custom event. <br/>
-       * @private <br/>
-       * @method _getImage
-       */
-      _getImage: function() {
-        // get selected files
-        var fileSelected = this.$.fileChooser.files;
-        if (fileSelected.length > 0) {
-          // get specific file
-          var fileToLoad = fileSelected[0];
-          // create file reader
-          var fileReader = new FileReader();
-          // create load listener
-          fileReader.onload = function(e) {
-            // data: base64
-            var srcData = e.target.result;
-            this.imageSource = srcData;
-            this.fire("profile-image-changed", {value: "Profile Image changed!"});
-          }.bind(this)
-          // register listener
-          fileReader.readAsDataURL(fileToLoad);
-        }
-      }
-    });
-  })();
-</script>
+      });
+    })();
+  </script>
+</dom-module>

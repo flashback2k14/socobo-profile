@@ -1,3 +1,4 @@
+<link rel="import" href="elements.html">
 <!--
 The following custom properties and mixins are available for styling:
 
@@ -12,38 +13,38 @@ Custom property | Description | Default
 @demo demo/index.html
 -->
 <dom-module id="socobo-profile-page">
-  <style>
-    :host {
-      display: block;
-    }
-    .profile-container {
-      @apply(--layout-horizontal);
-      width: 100%;
-      height: 100%;
-      @apply(--socobo-profile-page-profile-container);
-    }
-    .profile-image-container {
-      @apply(--layout-horizontal);
-      @apply(--layout-center-justified);
-      width: 20%;
-      height: 900px; /*100%;*/
-      margin: 0;
-      background: -webkit-linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
-      background: -o-linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
-      background: -moz-linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
-      background: linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
-      @apply(--socobo-profile-page-profile-image-container);
-    }
-    .profile-info-container {
-      @apply(--layout-vertical);
-      width: 80%;
-      height: 100%;
-      margin: 0;
-      @apply(--socobo-profile-page-profile-info-container);
-    }
-  </style>
-
   <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .profile-container {
+        @apply(--layout-horizontal);
+        width: 100%;
+        height: 100%;
+        @apply(--socobo-profile-page-profile-container);
+      }
+      .profile-image-container {
+        @apply(--layout-horizontal);
+        @apply(--layout-center-justified);
+        width: 20%;
+        height: 900px; /*100%;*/
+        margin: 0;
+        background: -webkit-linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
+        background: -o-linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
+        background: -moz-linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
+        background: linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
+        @apply(--socobo-profile-page-profile-image-container);
+      }
+      .profile-info-container {
+        @apply(--layout-vertical);
+        width: 80%;
+        height: 100%;
+        margin: 0;
+        @apply(--socobo-profile-page-profile-info-container);
+      }
+    </style>
+
     <div class="profile-container">
       <div class="profile-image-container">
         <socobo-profile-image
@@ -68,101 +69,101 @@ Custom property | Description | Default
 
     <paper-toast id="infoToast" duration="2000"></paper-toast>
   </template>
-</dom-module>
 
-<script>
-  (function() {
-    Polymer({
-      is: 'socobo-profile-page',
+  <script>
+    (function() {
+      Polymer({
+        is: 'socobo-profile-page',
 
-      /**
-       * Element Properties.
-       */
-      properties: {
         /**
-         * User Login Object
+         * Element Properties.
          */
-        userLogin: {
-          type: Object,
-          value: {},
-          notify: true
+        properties: {
+          /**
+           * User Login Object
+           */
+          userLogin: {
+            type: Object,
+            value: {},
+            notify: true
+          },
+          /**
+           * User Information Object
+           */
+          userObject: {
+            type: Object,
+            value: {},
+            notify: true
+          }
         },
         /**
-         * User Information Object
+         * PROFILE IMAGE
          */
-        userObject: {
-          type: Object,
-          value: {},
-          notify: true
+        /**
+         * Show Toast if the Profile Image is changed. <br/>
+         * @param {Object} e Message
+         * @private
+         * @method _handleProfileImageChanged
+         */
+        _handleProfileImageChanged: function(e) {
+          this.$.infoToast.text = e.detail.value;
+          this.$.infoToast.toggle();
+        },
+
+        /**
+         * PROFILE INFO
+         */
+        /**
+         *
+         * @param e
+         * @private
+         * @method _handleChangeEmailAddress
+         */
+        _handleChangeEmailAddress: function(e){
+          alert(JSON.stringify(e.detail));
+        },
+
+        /**
+         *
+         * @param {Object} e
+         * @private
+         * @method _handleChangePassword
+         */
+        _handleChangePassword: function(e) {
+          alert(JSON.stringify(e.detail));
+        },
+
+        /**
+         *
+         * @param {Object} e
+         * @private
+         * @method _handleResetPassword
+         */
+        _handleResetPassword: function(e) {
+          alert(JSON.stringify(e.detail));
+        },
+
+        /**
+         *
+         * @param {Object} e
+         * @private
+         * @method _handleDeleteAccount
+         */
+        _handleDeleteAccount: function(e) {
+          alert(JSON.stringify(e.detail));
+        },
+
+        /**
+         * Show Toast if the Passwords not matching. <br/>
+         * @param {Object} e Message
+         * @private
+         * @method _handlePasswordsNotMatching
+         */
+        _handlePasswordsNotMatching: function(e) {
+          this.$.infoToast.text = e.detail.value;
+          this.$.infoToast.toggle();
         }
-      },
-      /**
-       * PROFILE IMAGE
-       */
-      /**
-       * Show Toast if the Profile Image is changed. <br/>
-       * @param {Object} e Message
-       * @private
-       * @method _handleProfileImageChanged
-       */
-      _handleProfileImageChanged: function(e) {
-        this.$.infoToast.text = e.detail.value;
-        this.$.infoToast.toggle();
-      },
-
-      /**
-       * PROFILE INFO
-       */
-      /**
-       *
-       * @param e
-       * @private
-       * @method _handleChangeEmailAddress
-       */
-      _handleChangeEmailAddress: function(e){
-        alert(JSON.stringify(e.detail));
-      },
-
-      /**
-       *
-       * @param {Object} e
-       * @private
-       * @method _handleChangePassword
-       */
-      _handleChangePassword: function(e) {
-        alert(JSON.stringify(e.detail));
-      },
-
-      /**
-       *
-       * @param {Object} e
-       * @private
-       * @method _handleResetPassword
-       */
-      _handleResetPassword: function(e) {
-        alert(JSON.stringify(e.detail));
-      },
-
-      /**
-       *
-       * @param {Object} e
-       * @private
-       * @method _handleDeleteAccount
-       */
-      _handleDeleteAccount: function(e) {
-        alert(JSON.stringify(e.detail));
-      },
-
-      /**
-       * Show Toast if the Passwords not matching. <br/>
-       * @param {Object} e Message
-       * @private
-       * @method _handlePasswordsNotMatching
-       */
-      _handlePasswordsNotMatching: function(e) {
-        this.$.infoToast.text = e.detail.value;
-        this.$.infoToast.toggle();
-      }
-    });
-  })();
-</script>
+      });
+    })();
+  </script>
+</dom-module>
