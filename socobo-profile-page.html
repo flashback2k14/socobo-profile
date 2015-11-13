@@ -28,7 +28,6 @@ Custom property | Description | Default
         @apply(--layout-horizontal);
         @apply(--layout-center-justified);
         width: 20%;
-        height: 900px; /*100%;*/
         margin: 0;
         background: -webkit-linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
         background: -o-linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
@@ -39,12 +38,12 @@ Custom property | Description | Default
       .profile-info-container {
         @apply(--layout-vertical);
         width: 80%;
-        height: 100%;
         margin: 0;
         @apply(--socobo-profile-page-profile-info-container);
       }
     </style>
 
+    <!-- Main Page Element -->
     <div class="profile-container">
       <div class="profile-image-container">
         <socobo-profile-image
@@ -69,14 +68,42 @@ Custom property | Description | Default
       </div>
     </div>
 
-    <paper-toast id="infoToast" duration="2000"></paper-toast>
+    <!-- Info Elements-->
+    <paper-toast
+      id="infoToast"
+      duration="2000">
+    </paper-toast>
+    <paper-dialog
+      id='confirmRemoveAccountDialog'
+      entry-animation='scale-up-animation'
+      exit-animation='fade-out-animation'
+      modal>
+      <h2>Are you sure to delete your account by socobo project?</h2>
+      <div class='buttons'>
+        <paper-button dialog-dismiss autofocus>Cancel</paper-button>
+        <paper-button on-tap='_deleteAccount'>OK</paper-button>
+      </div>
+    </paper-dialog>
   </template>
 
   <script>
     (function() {
       Polymer({
         is: 'socobo-profile-page',
-
+        /**
+         * This Event is fired if the user changed the profile image. <br/>
+         * `Detail`: String: "profileImage Data" <br/>
+         * @event profile-user-image-changed
+         */
+        /**
+         * This Event is fired if the user changed the information. <br/>
+         * `Detail`: Object: {name: "name", email: "email"} <br/>
+         * @event profile-user-info-changed
+         */
+        /**
+         * This Event is fired if the user deleted the account. <br/>
+         * @event user-account-deleted
+         */
         /**
          * Element Properties.
          */
@@ -98,6 +125,12 @@ Custom property | Description | Default
             notify: true
           }
         },
+        /**
+         * Helper Object for holding Delete Account Information for using in the Confirm Dialog.
+         * @type {Object}
+         * @private
+         */
+        _tmpDeleteAccountData: {},
 
         /**
          * PROFILE IMAGE
@@ -109,8 +142,16 @@ Custom property | Description | Default
          * @method _handleProfileImageChanged
          */
         _handleProfileImageChanged: function(e) {
-          Util.getInstance(this).showToast(this.$.infoToast, e.detail.value, "#333333", "#EEEEEE");
-          this.fire("profile-image-changed", this.profileObject.profileImage);
+          SocoboProfile
+            .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
+            .updateProfileData({profileImage: this.profileObject.profileImage})
+            .then(function(succ) {
+              Util.getInstance(this).showToast(this.$.infoToast, e.detail.value, "#333333", "#EEEEEE");
+              this.fire("profile-user-image-changed", this.profileObject.profileImage);
+            }.bind(this))
+            .catch(function(err) {
+              Util.getInstance(this).showToast(this.$.infoToast, err.message, "#FF3333", "#EEEEEE");
+            }.bind(this));
         },
 
         /**
@@ -119,12 +160,18 @@ Custom property | Description | Default
         /**
          * USER INFO
          */
+        /**
+         * Handle save user information custom event. </br>
+         * @param {Object} e CustomEvent
+         * @private
+         * @method _handleSaveInfoStandard
+         */
         _handleSaveInfoStandard: function(e) {
           SocoboProfile
             .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
             .updateProfileData(e.detail)
             .then(function(succ) {
-              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#2EB82E", "#EEEEEE");
+              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#333333", "#EEEEEE");
               this.fire("profile-user-info-changed", e.detail);
             }.bind(this))
             .catch(function(err) {
@@ -135,12 +182,18 @@ Custom property | Description | Default
         /**
          * USER BIOGRAPHY
          */
+        /**
+         * Handle save biography information custom event. </br>
+         * @param {Object} e CustomEvent
+         * @private
+         * @method _handleSaveInfoBiography
+         */
         _handleSaveInfoBiography: function(e) {
           SocoboProfile
             .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
             .updateProfileData(e.detail)
             .then(function(succ) {
-              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#2EB82E", "#EEEEEE");
+              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#333333", "#EEEEEE");
             }.bind(this))
             .catch(function(err) {
               Util.getInstance(this).showToast(this.$.infoToast, err.message, "#FF3333", "#EEEEEE");
@@ -151,8 +204,8 @@ Custom property | Description | Default
          * ADMINISTRATION
          */
         /**
-         *
-         * @param e
+         * Handle change email address custom event. </br>
+         * @param {Object} e CustomEvent
          * @private
          * @method _handleChangeEmailAddress
          */
@@ -161,15 +214,15 @@ Custom property | Description | Default
             .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
             .changeUserEmailAddress(e.detail)
             .then(function(succ) {
-              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#2EB82E", "#EEEEEE");
+              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#333333", "#EEEEEE");
             }.bind(this))
             .catch(function(err) {
               Util.getInstance(this).showToast(this.$.infoToast, err.value, "#FF3333", "#EEEEEE");
             }.bind(this));
         },
         /**
-         *
-         * @param {Object} e
+         * Handle change password custom event. </br>
+         * @param {Object} e CustomEvent
          * @private
          * @method _handleChangePassword
          */
@@ -178,15 +231,15 @@ Custom property | Description | Default
             .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
             .changeUserPassword(e.detail)
             .then(function(succ) {
-              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#2EB82E", "#EEEEEE");
+              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#333333", "#EEEEEE");
             }.bind(this))
             .catch(function(err) {
               Util.getInstance(this).showToast(this.$.infoToast, err.value, "#FF3333", "#EEEEEE");
             }.bind(this));
         },
         /**
-         *
-         * @param {Object} e
+         * Handle reset password custom event. </br>
+         * @param {Object} e CustomEvent
          * @private
          * @method _handleResetPassword
          */
@@ -195,29 +248,41 @@ Custom property | Description | Default
             .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
             .resetUserPassword(e.detail)
             .then(function(succ) {
-              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#2EB82E", "#EEEEEE");
+              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#333333", "#EEEEEE");
             }.bind(this))
             .catch(function(err) {
               Util.getInstance(this).showToast(this.$.infoToast, err.value, "#FF3333", "#EEEEEE");
             }.bind(this));
         },
         /**
-         *
-         * @param {Object} e
+         * Handle delete account custom event. </br>
+         * @param {Object} e CustomEvent
          * @private
          * @method _handleDeleteAccount
          */
         _handleDeleteAccount: function(e) {
-          // ToDo: Add Confirm Dialog
+          this._tmpDeleteAccountData = e.detail;
+          this.$.confirmRemoveAccountDialog.toggle();
+        },
+        /**
+         * Delete Account if the User press the OK Button from the Confirm Dialog. </br>
+         * @private
+         * @method _deleteAccount
+         */
+        _deleteAccount: function() {
           SocoboProfile
             .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
-            .removeUserAccount(e.detail)
+            .removeUserAccount(this._tmpDeleteAccountData)
             .then(function(succ) {
-              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#2EB82E", "#EEEEEE");
-              this.fire("account-deleted");
+              this.$.confirmRemoveAccountDialog.toggle();
+              Util.getInstance(this).showToast(this.$.infoToast, succ.value, "#333333", "#EEEEEE");
+              this._tmpDeleteAccountData = {};
+              this.fire("user-account-deleted");
             }.bind(this))
             .catch(function(err) {
+              this.$.confirmRemoveAccountDialog.toggle();
               Util.getInstance(this).showToast(this.$.infoToast, err.value, "#FF3333", "#EEEEEE");
+              this._tmpDeleteAccountData = {};
             }.bind(this));
         },
         /**

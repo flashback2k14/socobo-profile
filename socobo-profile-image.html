@@ -6,6 +6,8 @@ Custom property | Description | Default
 ----------------|-------------|----------
 `--socobo-profile-image-image-holder-container` | Styling the Container that holds the Image. | `{}`
 `--socobo-profile-image-image-container` | Styling the Container that lies under the holder Container. | `{}`
+`--socobo-profile-image-circular-theme` | Styling the Circular Image theme. | `{}`
+`--socobo-profile-image-circular-hover-theme` | Styling the Circular Image Hover state theme. | `{}`
 
 @demo demo/index.html
 -->
@@ -33,17 +35,19 @@ Custom property | Description | Default
         height: 300px;
         width: 300px;
         overflow: hidden;
-        -webkit-border-radius: 150px;
-        -moz-border-radius: 150px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
         border-radius: 50%;
         -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
         -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
         box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+        @apply(--socobo-profile-image-circular-theme);
       }
       .circular:hover {
         -webkit-box-shadow: 0 0 8px rgb(120, 144, 156);
         -moz-box-shadow: 0 0 8px rgb(120, 144, 156);
         box-shadow: 0 0 8px rgb(120, 144, 156);
+        @apply(--socobo-profile-image-circular-hover-theme);
       }
       .hide-file-chooser {
         display: none;
@@ -111,10 +115,9 @@ Custom property | Description | Default
             // create load listener
             fileReader.onload = function(e) {
               // data: base64
-              var srcData = e.target.result;
-              this.imageSource = srcData;
+              this.imageSource = e.target.result;
               this.fire("profile-image-changed", {value: "Profile Image changed!"});
-            }.bind(this)
+            }.bind(this);
             // register listener
             fileReader.readAsDataURL(fileToLoad);
           }

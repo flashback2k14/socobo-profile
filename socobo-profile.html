@@ -17,7 +17,7 @@ Custom property | Description | Default
       }
       .profile-wrapper {
         width: 100%;
-        height: 900px; /*temp for developing (100%)*/
+        height: 100%;
         @apply(--socobo-profile-profile-wrapper);
       }
     </style>
@@ -27,9 +27,9 @@ Custom property | Description | Default
         id="profilePage"
         user-login="{{userLogin}}"
         profile-object="{{_profileObject}}"
-        on-profile-image-changed="_handleProfileDataChanged"
+        on-profile-user-image-changed="_handleProfileUserImageChanged"
         on-profile-user-info-changed="_handleProfileUserInfoChanged"
-        on-account-deleted="_handleAccountDeleted">
+        on-user-account-deleted="_handleUserAccountDeleted">
       </socobo-profile-page>
     </div>
   </template>
@@ -38,6 +38,25 @@ Custom property | Description | Default
     (function() {
       Polymer({
         is: 'socobo-profile',
+        /**
+         * This Event is fired if the user changed the profile image. <br/>
+         * `Detail`: String: "profileImage Data" <br/>
+         * @event profile-image-changed
+         */
+        /**
+         * This Event is fired if the user changed the information. <br/>
+         * `Detail`: Object: {name: "name", email: "email"} <br/>
+         * @event profile-info-changed
+         */
+        /**
+         * This Event is fired after the profile data is loaded. <br/>
+         * `Detail`: Object: {name: "name", email: "email", profileImage: "profileImage"} <br/>
+         * @event profile-data-changed
+         */
+        /**
+         * This Event is fired if the user deleted the account. <br/>
+         * @event account-deleted
+         */
         /**
          * Element Properties.
          */
@@ -51,48 +70,44 @@ Custom property | Description | Default
             notify: true
           }
         },
-
         /**
          * User Profile Object
+         * @type Object
          * @private
          */
         _profileObject: {},
-
         /**
          * PRIVATE FUNCTIONS
          */
         /**
-         *
+         * Handle changed user image and fire an event.
          * @param e CustomEvent
          * @private
          * @method _handleProfileDataChanged
          */
-        _handleProfileDataChanged: function(e) {
+        _handleProfileUserImageChanged: function(e) {
           var profileImage = e.detail;
           this.fire("profile-image-changed", profileImage);
         },
-
         /**
-         *
+         * handle changed user information and fire an event.
          * @param e CustomEvent
          * @private
          * @method _handleProfileUserInfoChanged
          */
         _handleProfileUserInfoChanged: function(e) {
-          var tmp = e.detail;
-          this.fire("profile-user-info-changed", tmp);
+          var userInfo = e.detail;
+          this.fire("profile-info-changed", userInfo);
         },
-
         /**
-         *
+         * handle deleted user account and fire an event.
          * @param e CustomEvent
          * @private
          * @method _handleAccountDeleted
          */
-        _handleAccountDeleted: function(e) {
+        _handleUserAccountDeleted: function(e) {
           this.fire("account-deleted");
         },
-
         /**
          * PUBLIC FUNCTIONS
          */
@@ -106,7 +121,7 @@ Custom property | Description | Default
             .loadProfileData()
             .then(function(data){
               this._profileObject = data;
-              this.fire("profile-data-changed", data);
+              this.fire("profile-data-changed", {name: data.name, email: data.email, profileImage: data.profileImage});
             }.bind(this))
             .catch(function(err){
               console.dir(err);
