@@ -350,7 +350,7 @@ Custom property | Description | Default
          * @method _editInfoStandard
          */
         _editInfoStandard: function(e) {
-          Util.getInstance(this).toggleInformationArea(e);
+          ProfileUtil.getInstance(this).toggleInformationArea(e);
         },
         /**
          * Function for Show / Hide Edit Biography Section
@@ -359,7 +359,7 @@ Custom property | Description | Default
          * @method _editInfoBiography
          */
         _editInfoBiography: function(e) {
-          Util.getInstance(this).toggleInformationArea(e);
+          ProfileUtil.getInstance(this).toggleInformationArea(e);
         },
 
         /**
@@ -402,7 +402,7 @@ Custom property | Description | Default
          * @member _changeEmailAddress
          */
         _changeEmailAddress: function(e) {
-          this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
+          this._adminSection = ProfileUtil.getInstance(this).toggleRightAdminContainerElements(e);
         },
         /**
          * Toggle Change Password
@@ -411,7 +411,7 @@ Custom property | Description | Default
          * @method _changePassword
          */
         _changePassword: function(e) {
-          this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
+          this._adminSection = ProfileUtil.getInstance(this).toggleRightAdminContainerElements(e);
         },
         /**
          * Toggle Reset Password Section
@@ -420,7 +420,7 @@ Custom property | Description | Default
          * @method _resetPassword
          */
         _resetPassword: function(e) {
-          this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
+          this._adminSection = ProfileUtil.getInstance(this).toggleRightAdminContainerElements(e);
         },
         /**
          * Toggle Delete Account Section
@@ -429,7 +429,7 @@ Custom property | Description | Default
          * @method _deleteAccount
          */
         _deleteAccount: function(e) {
-          this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
+          this._adminSection = ProfileUtil.getInstance(this).toggleRightAdminContainerElements(e);
         },
 
         /**
@@ -459,7 +459,7 @@ Custom property | Description | Default
               this._changeValues = {};
               break;
             case "ChangePassword":
-              if (Util.getInstance(this).arePasswordsMatching(txtOldPassword.value, txtNewPassword.value)) {
+              if (ProfileUtil.getInstance(this).arePasswordsMatching(txtOldPassword.value, txtNewPassword.value)) {
                 this._changeValues = {
                   type: "ChangePassword",
                   oldMail: txtOldEmailAddress.value,
@@ -501,7 +501,7 @@ Custom property | Description | Default
             default:
               alert("no valid operation chosen!");
           }
-          this._adminSection = Util.getInstance(this).toggleRightAdminContainerElements(e);
+          this._adminSection = ProfileUtil.getInstance(this).toggleRightAdminContainerElements(e);
         },
         /**
          * Clear Input Fields

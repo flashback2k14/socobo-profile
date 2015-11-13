@@ -77,7 +77,7 @@ Custom property | Description | Default
         is: 'socobo-profile-image',
         /**
          * This Event is fired if the profile image is changed. <br/>
-         * @event profile-image-changed
+         * @event inner-profile-image-changed
          */
         /**
          * Element Properties.
@@ -116,7 +116,7 @@ Custom property | Description | Default
             fileReader.onload = function(e) {
               // data: base64
               this.imageSource = e.target.result;
-              this.fire("profile-image-changed", {value: "Profile Image changed!"});
+              this.fire("inner-profile-image-changed", {value: "Profile Image changed!"});
             }.bind(this);
             // register listener
             fileReader.readAsDataURL(fileToLoad);
