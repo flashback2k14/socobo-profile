@@ -1,5 +1,9 @@
 <link rel="import" href="elements.html">
 <!--
+TODO:
+  - Make Element Responsive
+  - Handle invalid Admin Inputs
+
 The following custom properties and mixins are available for styling:
 
 Custom property | Description | Default
@@ -7,7 +11,7 @@ Custom property | Description | Default
 `--socobo-profile-page-profile-container` | Styling the Profile Container that holds the Image and the Information. | `{}`
 `--socobo-profile-page-profile-image-container` | Styling the Image Holder Container | `{}`
 `--socobo-profile-page-profile-image-container-bg-color-from` | Styling the Gradient Color for the Background - From | `{#04212A}`
-`--socobo-profile-page-profile-image-container-bg-color-to` | Styling the Gradient Color for the Background - To | `{#062f3c}`
+`--socobo-profile-page-profile-image-container-bg-color-to` | Styling the Gradient Color for the Background - To | `{#062F3C}`
 `--socobo-profile-page-profile-info-container` | Styling the Information Holder Container | `{}`
 
 @demo demo/index.html
@@ -27,12 +31,14 @@ Custom property | Description | Default
       .profile-image-container {
         @apply(--layout-horizontal);
         @apply(--layout-center-justified);
+        min-width: 320px;
         width: 20%;
+        max-width: 20%;
         margin: 0;
-        background: -webkit-linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
-        background: -o-linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
-        background: -moz-linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
-        background: linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062f3c));
+        background: -webkit-linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062F3C));
+        background: -o-linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062F3C));
+        background: -moz-linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062F3C));
+        background: linear-gradient(var(--socobo-profile-page-profile-image-container-bg-color-from, #04212A),var(--socobo-profile-page-profile-image-container-bg-color-to, #062F3C));
         @apply(--socobo-profile-page-profile-image-container);
       }
       .profile-info-container {
@@ -109,6 +115,7 @@ Custom property | Description | Default
          * `Detail`: Object: {value: "The Login is expired!"} <br/>
          * @event login-expired
          */
+
         /**
          * Element Properties.
          */
@@ -235,10 +242,28 @@ Custom property | Description | Default
             .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
             .changeUserEmailAddress(e.detail)
             .then(function(succ) {
-              ProfileUtil.getInstance(this).showToast(this.$.infoToast, succ.value, "#333333", "#EEEEEE");
+              ProfileUtil
+                .getInstance(this)
+                .showToast(this.$.infoToast, succ.value, "#333333", "#EEEEEE");
+              SocoboProfile
+                .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
+                .updateProfileData({email: succ.email})
+                .then(function(success) {
+                  ProfileUtil
+                    .getInstance(this)
+                    .showToast(this.$.infoToast, success.value, "#333333", "#EEEEEE");
+                  this.fire("email-address-updated", {value: succ.email}, {node: this.$.profileInfo});
+                }.bind(this))
+                .catch(function(error) {
+                  ProfileUtil
+                    .getInstance(this)
+                    .showToast(this.$.infoToast, error.value, "#FF3333", "#EEEEEE");
+                }.bind(this));
             }.bind(this))
             .catch(function(err) {
-              ProfileUtil.getInstance(this).showToast(this.$.infoToast, err.value, "#FF3333", "#EEEEEE");
+              ProfileUtil
+                .getInstance(this)
+                .showToast(this.$.infoToast, err.value, "#FF3333", "#EEEEEE");
             }.bind(this));
         },
         /**

@@ -1,10 +1,25 @@
 <link rel="import" href="elements.html">
 <!--
+TODO:
+  - Add all Mixins
+  - Add Description for Mixins!
+  - Make Element Responsive
+
 The following custom properties and mixins are available for styling:
 
 Custom property | Description | Default
 ----------------|-------------|----------
-`--socobo-profile-info-todo` | TODO: Add Mixins | `{}`
+`--socobo-profile-info-container` |  | `{}`
+`--socobo-profile-info-paper-card-header-bg` |  | `{#062F3C}`
+`--socobo-profile-info-paper-card-header-text-color` |  | `{#FFFFFF}`
+`--socobo-profile-info-style-save-button-bg` |  | `{--paper-green-500}`
+`--socobo-profile-info-style-save-button-color` |  | `{#FFFFFF}`
+`--socobo-profile-info-style-clear-button-bg` |  | `{--paper-pink-500}`
+`--socobo-profile-info-style-clear-button-color` |  | `{#FFFFFF}`
+`--socobo-profile-info-style-fab-edit-info-standard` |  | `{}`
+`--socobo-profile-info-style-fab-edit-info-biography` |  | `{}`
+`--socobo-profile-info-style-admin-buttons-bg` |  | `{--paper-indigo-700}`
+`--socobo-profile-info-style-admin-buttons-color` |  | `{#FFFFFF}`
 
 @demo demo/index.html
 -->
@@ -16,15 +31,16 @@ Custom property | Description | Default
       }
       .profile-info-container {
         @apply(--layout-vertical);
+        @apply(--socobo-profile-info-container);
       }
       .style-paper-card {
         --paper-card-header: {
-           background: #062f3c;
+           background: var(--socobo-profile-info-paper-card-header-bg, #062F3C);
          };
         --paper-card-header-text: {
            margin-left: 20px;
            font-size: 35px;
-           color: #fff;
+           color: var(--socobo-profile-info-paper-card-header-text-color, #FFFFFF);
          };
         --paper-card-content: {
            font-size: 20px;
@@ -46,6 +62,7 @@ Custom property | Description | Default
         top: 48px;
         right: 48px;
         z-index: 1;
+        @apply(--socobo-profile-info-style-fab-edit-info-standard);
       }
       .show-info {
         display: block;
@@ -65,15 +82,15 @@ Custom property | Description | Default
       }
       .style-save-button {
         --paper-button: {
-         background: var(--paper-green-500);
-         color: #ffffff;
+         background: var(--socobo-profile-info-style-save-button-bg, --paper-green-500);
+         color: var(--socobo-profile-info-style-save-button-color, #FFFFFF);
          font-size: medium;
        };
       }
       .style-clear-button {
         --paper-button: {
-         background: var(--paper-pink-500);
-         color: #ffffff;
+         background: var(--socobo-profile-info-style-clear-button-bg, --paper-pink-500);
+         color: var(--socobo-profile-info-style-clear-button-color, #FFFFFF);
          font-size: medium;
        };
       }
@@ -87,6 +104,7 @@ Custom property | Description | Default
         top: 48px;
         right: 48px;
         z-index: 1;
+        @apply(--socobo-profile-info-style-fab-edit-info-biography);
       }
       .width-for-inputs {
         width: 80%;
@@ -106,8 +124,8 @@ Custom property | Description | Default
       }
       .style-admin-buttons {
         --paper-button: {
-         background: var(--paper-indigo-700);
-         color: #ffffff;
+         background: var(--socobo-profile-info-style-admin-buttons-bg, --paper-indigo-700);
+         color: var(--socobo-profile-info-style-admin-buttons-color, #FFFFFF);
          font-size: medium;
          margin-bottom: 15px;
        };
@@ -139,7 +157,7 @@ Custom property | Description | Default
       <!-- Information Section -->
       <div class="profile-info-standard">
         <paper-card class="style-paper-card paper-card-height-normal" heading="Information" elevation="3">
-          <paper-fab id="fabEditInfoStandard" class="style-fab-edit-info-standard" icon="create" on-tap="_editInfoStandard"></paper-fab>
+          <paper-fab id="fabEditInfoStandard" class="style-fab-edit-info-standard" icon="create" on-tap="_toggleEditInformationSection"></paper-fab>
           <div class="card-content">
             <div id="showInfoStandard" class="show-info">
               <div class="vertical-line">
@@ -170,7 +188,7 @@ Custom property | Description | Default
       <!-- Biography Section -->
       <div class="profile-info-biography">
         <paper-card class="style-paper-card paper-card-height-normal" heading="Biography" elevation="3">
-          <paper-fab id="fabEditInfoBiography" class="style-fab-edit-info-biography" icon="create" on-tap="_editInfoBiography"></paper-fab>
+          <paper-fab id="fabEditInfoBiography" class="style-fab-edit-info-biography" icon="create" on-tap="_toggleEditInformationSection"></paper-fab>
           <div class="card-content">
             <div id="showInfoBio" class="show-info">
               <div class="vertical-line">
@@ -223,7 +241,7 @@ Custom property | Description | Default
                   <paper-input
                     id="txtOldEmailAddress"
                     class="style-admin-inputs hide-right-admin-container"
-                    label="Old Emailaddress"
+                    label="Old Email Address"
                     type="email"
                     no-label-float="true"
                     auto-validate
@@ -233,7 +251,7 @@ Custom property | Description | Default
                   <paper-input
                     id="txtNewEmailAddress"
                     class="style-admin-inputs hide-right-admin-container"
-                    label="New Emailaddress"
+                    label="New Email Address"
                     type="email"
                     no-label-float="true"
                     auto-validate
@@ -331,6 +349,13 @@ Custom property | Description | Default
         },
 
         /**
+         * Element Listeners
+         */
+        listeners: {
+          "email-address-updated": "_handleEmailAddressUpdated"
+        },
+
+        /**
          * Helper variable to manage Admin Section State.
          * @type String
          * @private
@@ -344,21 +369,23 @@ Custom property | Description | Default
         _changeValues: {},
 
         /**
+         * Handle changed Email Address from Administration
+         * @param event Event
+         * @param context Event Data
+         * @private
+         * @method _handleEmailAddressUpdated
+         */
+        _handleEmailAddressUpdated: function(event, context) {
+          this.$.txtEmailAddress.value = context.value;
+        },
+
+        /**
          * Function for Show / Hide Edit Information Section
          * @param {Object} e FAB
          * @private
-         * @method _editInfoStandard
+         * @method _toggleEditInformationSection
          */
-        _editInfoStandard: function(e) {
-          ProfileUtil.getInstance(this).toggleInformationArea(e);
-        },
-        /**
-         * Function for Show / Hide Edit Biography Section
-         * @param {Object} e FAB
-         * @private
-         * @method _editInfoBiography
-         */
-        _editInfoBiography: function(e) {
+        _toggleEditInformationSection: function(e) {
           ProfileUtil.getInstance(this).toggleInformationArea(e);
         },
 
