@@ -88,7 +88,7 @@ Custom property | Description | Default
     <!-- Info Elements-->
     <paper-toast
       id="infoToast"
-      duration="2000">
+      duration="4000">
     </paper-toast>
   </template>
 
@@ -234,36 +234,38 @@ Custom property | Description | Default
          * @method _handleChangeEmailAddress
          */
         _handleChangeEmailAddress: function(e){
+          // check if user still logged in
           if (ProfileUtil.getInstance(this).isUserLoginExpired(this.userLogin.expires)) {
             this.fire("login-expired", {value: "The Login is expired!"});
             return;
           }
+          // collect successful messages
+          var successMessage = "";
+          // change user email address
           SocoboProfile
             .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
             .changeUserEmailAddress(e.detail)
             .then(function(succ) {
-              ProfileUtil
-                .getInstance(this)
-                .showToast(this.$.infoToast, succ.value, "#333333", "#EEEEEE");
+              // add success message from change user email address
+              successMessage += succ.value + "; ";
+              // update profile data
               SocoboProfile
                 .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
                 .updateProfileData({email: succ.email})
                 .then(function(success) {
-                  ProfileUtil
-                    .getInstance(this)
-                    .showToast(this.$.infoToast, success.value, "#333333", "#EEEEEE");
+                  // add success message from update profile data
+                  successMessage += success.value;
+                  // show info notification
+                  ProfileUtil.getInstance(this).showToast(this.$.infoToast, successMessage, "#333333", "#EEEEEE");
+                  // fire custom event
                   this.fire("email-address-updated", {value: succ.email}, {node: this.$.profileInfo});
                 }.bind(this))
                 .catch(function(error) {
-                  ProfileUtil
-                    .getInstance(this)
-                    .showToast(this.$.infoToast, error.value, "#FF3333", "#EEEEEE");
+                  ProfileUtil.getInstance(this).showToast(this.$.infoToast, error.value, "#FF3333", "#EEEEEE");
                 }.bind(this));
             }.bind(this))
             .catch(function(err) {
-              ProfileUtil
-                .getInstance(this)
-                .showToast(this.$.infoToast, err.value, "#FF3333", "#EEEEEE");
+              ProfileUtil.getInstance(this).showToast(this.$.infoToast, err.value, "#FF3333", "#EEEEEE");
             }.bind(this));
         },
         /**
@@ -328,19 +330,35 @@ Custom property | Description | Default
          * @method _deleteAccount
          */
         _deleteAccount: function() {
+          // collect successful messages
+          var successMessage = "";
+          // remove all user data
           SocoboProfile
             .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
-            .removeUserAccount(this._tmpDeleteAccountData)
+            .removeAllUserData()
             .then(function(succ) {
-              this.$.confirmRemoveAccountDialog.toggle();
-              ProfileUtil.getInstance(this).showToast(this.$.infoToast, succ.value, "#333333", "#EEEEEE");
-              this._tmpDeleteAccountData = {};
-              this.fire("user-account-deleted");
+              // add success message from remove user account
+              successMessage += succ.value + "; ";
+              // remove user account
+              SocoboProfile
+                .getInstance(this.userLogin.firebaseUrl, this.userLogin.userId)
+                .removeUserAccount(this._tmpDeleteAccountData)
+                .then(function(success){
+                  // add success message from remove all user data
+                  successMessage += success.value;
+                  // show info notification, hide dialog and reset temp delete account data
+                  this._deleteAccountNotificationHelper(successMessage);
+                  // fire custom event
+                  this.fire("user-account-deleted");
+                }.bind(this))
+                .catch(function(error){
+                  // show info notification, hide dialog and reset temp delete account data
+                  this._deleteAccountNotificationHelper(error.value);
+                }.bind(this));
             }.bind(this))
             .catch(function(err) {
-              this.$.confirmRemoveAccountDialog.toggle();
-              ProfileUtil.getInstance(this).showToast(this.$.infoToast, err.value, "#FF3333", "#EEEEEE");
-              this._tmpDeleteAccountData = {};
+              // show info notification, hide dialog and reset temp delete account data
+              this._deleteAccountNotificationHelper(err.value);
             }.bind(this));
         },
         /**
@@ -351,6 +369,21 @@ Custom property | Description | Default
          */
         _handlePasswordsNotMatching: function(e) {
           ProfileUtil.getInstance(this).showToast(this.$.infoToast, e.detail.value, "#FF3333", "#EEEEEE");
+        },
+
+        /**
+         * Delete Account Notification Helper
+         * @param text Notification Message
+         * @private
+         * @method _deleteAccountNotificationHelper
+         */
+        _deleteAccountNotificationHelper: function(text) {
+          // show info notification
+          ProfileUtil.getInstance(this).showToast(this.$.infoToast, text, "#333333", "#EEEEEE");
+          // hide confirm dialog
+          this.$.confirmRemoveAccountDialog.toggle();
+          // reset temporary account data
+          this._tmpDeleteAccountData = {};
         }
       });
     })();

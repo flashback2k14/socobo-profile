@@ -386,7 +386,9 @@ Custom property | Description | Default
          * @method _toggleEditInformationSection
          */
         _toggleEditInformationSection: function(e) {
-          ProfileUtil.getInstance(this).toggleInformationArea(e);
+          ProfileUtil
+            .getInstance(this)
+            .toggleInformationArea(this.$.showInfoStandard, this.$.editInfoStandard, this.$.showInfoBio, this.$.editInfoBio, e);
         },
 
         /**
@@ -480,30 +482,19 @@ Custom property | Description | Default
                 oldPwd: txtOldPassword.value
               };
               this.fire("change-email-address", this._changeValues);
-              txtOldEmailAddress.value = "";
-              txtNewEmailAddress.value = "";
-              txtOldPassword.value = "";
+              this._clearAdminChanges();
               this._changeValues = {};
               break;
             case "ChangePassword":
-              if (ProfileUtil.getInstance(this).arePasswordsMatching(txtOldPassword.value, txtNewPassword.value)) {
-                this._changeValues = {
-                  type: "ChangePassword",
-                  oldMail: txtOldEmailAddress.value,
-                  oldPwd: txtOldPassword.value,
-                  newPwd: txtNewPassword.value
-                };
-                txtOldEmailAddress.value = "";
-                txtOldPassword.value = "";
-                txtNewPassword.value = "";
-                this.fire("change-password", this._changeValues);
-              } else {
-                this.fire("passwords-not-matching", {value: "Passwords not matching!"});
-                txtOldPassword.value = "";
-                txtNewPassword.value = "";
-                this._changeValues = {};
-                return;
-              }
+              this._changeValues = {
+                type: "ChangePassword",
+                oldMail: txtOldEmailAddress.value,
+                oldPwd: txtOldPassword.value,
+                newPwd: txtNewPassword.value
+              };
+              this.fire("change-password", this._changeValues);
+              this._clearAdminChanges();
+              this._changeValues = {};
               break;
             case "ResetPassword":
               this._changeValues = {
@@ -511,7 +502,7 @@ Custom property | Description | Default
                 oldMail: txtOldEmailAddress.value
               };
               this.fire("reset-password", this._changeValues);
-              txtOldEmailAddress.value = "";
+              this._clearAdminChanges();
               this._changeValues = {};
               break;
             case "DeleteAccount":
@@ -521,8 +512,7 @@ Custom property | Description | Default
                 oldPwd: txtOldPassword.value
               };
               this.fire("delete-account", this._changeValues);
-              txtOldEmailAddress.value = "";
-              txtOldPassword.value = "";
+              this._clearAdminChanges();
               this._changeValues = {};
               break;
             default:
