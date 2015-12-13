@@ -45,7 +45,7 @@ Custom property | Description | Default
         is: 'socobo-profile',
         /**
          * This Event is fired if the user changed the profile image. <br/>
-         * `Detail`: String: "profileImage Data" <br/>
+         * `Detail`: Object: {profileImage: "profileImage Data"} <br/>
          * @event profile-image-changed
          */
         /**
@@ -92,8 +92,7 @@ Custom property | Description | Default
          * @method _handleProfileDataChanged
          */
         _handleProfileUserImageChanged: function(e) {
-          var profileImage = e.detail;
-          this.fire("profile-image-changed", profileImage);
+          this.fire("profile-image-changed", {profileImage: e.detail});
         },
         /**
          * handle changed user information and fire an event.

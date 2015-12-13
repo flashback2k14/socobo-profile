@@ -12,6 +12,8 @@ Custom property | Description | Default
 `--socobo-profile-info-container` |  | `{}`
 `--socobo-profile-info-paper-card-header-bg` |  | `{#062F3C}`
 `--socobo-profile-info-paper-card-header-text-color` |  | `{#FFFFFF}`
+`--socobo-profile-info-style-disabled-inputs-underline-color` |  | `{#FFFFFF}`
+`--socobo-profile-info-style-disabled-inputs-underline-focus-color` |  | `{#FFFFFF}`
 `--socobo-profile-info-style-save-button-bg` |  | `{--paper-green-500}`
 `--socobo-profile-info-style-save-button-color` |  | `{#FFFFFF}`
 `--socobo-profile-info-style-clear-button-bg` |  | `{--paper-pink-500}`
@@ -51,6 +53,18 @@ Custom property | Description | Default
       }
       .paper-card-height-large {
         height: 400px;
+      }
+      /*INPUT STYLING*/
+      .width-for-inputs {
+        width: 80%;
+      }
+      .style-disabled-inputs {
+        --paper-input-container-underline: {
+          background: var(--socobo-profile-info-style-disabled-inputs-underline-color, #FFFFFF);
+        };
+        --paper-input-container-underline-focus: {
+          background: var(--socobo-profile-info-style-disabled-inputs-underline-focus-color, #FFFFFF);
+        };
       }
       /*USER INFO*/
       .profile-info-standard {
@@ -106,9 +120,6 @@ Custom property | Description | Default
         z-index: 1;
         @apply(--socobo-profile-info-style-fab-edit-info-biography);
       }
-      .width-for-inputs {
-        width: 80%;
-      }
       /*USER ADMINISTRATION*/
       .profile-info-admin {
         @apply(--layout-vertical);
@@ -162,11 +173,11 @@ Custom property | Description | Default
             <div id="showInfoStandard" class="show-info">
               <div class="vertical-line">
                 <label for="txtUsernameView"><strong>Username</strong></label>
-                <paper-input id="txtUsernameView" class="width-for-inputs" label="Username" type="text" value="{{profileObject.name}}" no-label-float="true" readonly="true"></paper-input>
+                <paper-input id="txtUsernameView" class="width-for-inputs style-disabled-inputs" label="Username" type="text" value="{{profileObject.name}}" no-label-float="true" readonly="true"></paper-input>
               </div>
               <div class="vertical-line">
                 <label for="txtEmailAddressView"><strong>Email-Address</strong></label>
-                <paper-input id="txtEmailAddressView" class="width-for-inputs" label="Email-Address" type="email" value="{{profileObject.email}}" no-label-float="true" readonly="true"></paper-input>
+                <paper-input id="txtEmailAddressView" class="width-for-inputs style-disabled-inputs" label="Email-Address" type="email" value="{{profileObject.email}}" no-label-float="true" readonly="true"></paper-input>
               </div>
             </div>
             <div id="editInfoStandard" class="edit-info">
@@ -194,7 +205,7 @@ Custom property | Description | Default
               <div class="vertical-line">
                 <paper-textarea
                   id="txtBiographyView"
-                  class="width-for-inputs"
+                  class="width-for-inputs style-disabled-inputs"
                   rows="5"
                   max-rows="4"
                   value="{{profileObject.biography}}"
